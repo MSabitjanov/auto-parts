@@ -1,0 +1,4 @@
+1. Подключить PostgreSQL
+2. Установить PostGis
+3. Optimize upload images with pillow
+4. Add comments to Models
