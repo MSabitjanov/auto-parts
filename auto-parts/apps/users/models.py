@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import default_working_hours
+from .managers import CustomUserManager
 
 
 def get_upload_path(instance, filename):
@@ -26,12 +27,18 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+    objects = CustomUserManager()
+
     def __str__(self):
         return f"Пользователь {self.email}"
 
 
 class MasterSkill(models.Model):
     name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        verbose_name = "Специализация мастера"
+        verbose_name_plural = "Специализации мастеров"
 
     def __str__(self):
         return f"Специализация {self.name}"
