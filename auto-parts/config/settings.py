@@ -44,7 +44,14 @@ THIRD_PARTY_APPS = [
     "taggit",
 ]
 
-LOCAL_APPS = ["apps.users", "apps.parts", "apps.review", "apps.communication"]
+LOCAL_APPS = [
+    "apps.users",
+    "apps.parts",
+    "apps.review",
+    "apps.communication",
+    "apps.core",
+    "apps.images",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

@@ -5,6 +5,11 @@ User = get_user_model()
 
 
 class Chat(models.Model):
+    """
+    Модель чата, в которой хранятся все чаты пользователей.
+    Мастера и покупатели могут общаться только в рамках одного чата.
+    """
+
     user = models.ManyToManyField(
         User, verbose_name="Пользователь", related_name="chats"
     )
@@ -26,6 +31,10 @@ class Chat(models.Model):
 
 
 class Messages(models.Model):
+    """
+    Все сообщения которые отправляются в чате.
+    """
+
     sender = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -41,3 +50,10 @@ class Messages(models.Model):
         upload_to="attachments/", blank=True, verbose_name="Вложение"
     )
     send_time = models.DateTimeField(auto_now_add=True, verbose_name="Время отправки")
+
+    class Meta:
+        verbose_name = "Сообщение"
+        verbose_name_plural = "Сообщения"
+
+    def __str__(self):
+        return f"Сообщение {self.id}"

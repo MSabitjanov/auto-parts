@@ -21,3 +21,6 @@ class AutoPartsImagesAdmin(admin.ModelAdmin):
     )
     search_fields = ("auto_part__seller__user__email",)
     search_help_text = "Поиск по email"
+
+
+admin.register(MasterImages)
