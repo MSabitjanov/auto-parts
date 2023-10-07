@@ -13,6 +13,10 @@ def get_upload_path_for_part(instance, filename):
 
 
 class MasterImages(models.Model):
+    """
+    Модель изображений мастеров.
+    """
+
     master = models.ForeignKey(
         Master,
         on_delete=models.CASCADE,
@@ -32,6 +36,10 @@ class MasterImages(models.Model):
 
 
 class AutoPartsImages(models.Model):
+    """
+    Модель изображений автозапчастей.
+    """
+
     auto_part = models.ForeignKey(
         AutoParts,
         on_delete=models.CASCADE,
