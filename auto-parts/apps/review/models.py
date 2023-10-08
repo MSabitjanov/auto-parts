@@ -22,6 +22,7 @@ class Review(models.Model):
     comment = models.TextField(verbose_name="Комментарий")
     rating = models.PositiveSmallIntegerField(verbose_name="Оценка")
     created_at = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
 
     # Setting generic relation in order to get all reviews for a specific part
     part_reviews = GenericRelation(AutoParts, related_query_name="part_reviews")

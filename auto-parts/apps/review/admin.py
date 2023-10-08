@@ -14,7 +14,11 @@ class ReviewAdmin(admin.ModelAdmin):
         "rating",
         "part_reviews",
         "master_reviews",
+        "active",
+        "created_at",
     )
-    search_fields = ("user__email",)
-    search_help_text = "Поиск по email"
-    readonly_fields = ("content_type", "object_id")
+    search_fields = ("user__email", "comment")
+    search_help_text = "Поиск по email, комментарию"
+    list_filter = ("active",)
+    date_hierarchy = "created_at"
+    readonly_fields = ("user", "rating", "active", "content_type", "object_id")
