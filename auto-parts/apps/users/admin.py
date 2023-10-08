@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
         "last_name",
     )
     search_fields = ("email",)
-    search_help_text = "'Email' bo'yicha qidirish"
+    search_help_text = "Поиск по email"
     date_hierarchy = "date_joined"
 
     readonly_fields = "last_login", "date_joined"
@@ -51,25 +51,34 @@ class UserAdmin(admin.ModelAdmin):
 class MasterAdmin(admin.ModelAdmin):
     list_display = (
         "user",
-        "date_of_birth",
+        "region",
+        "rating",
         "start_of_carrier",
+        "phone_number",
+        "is_recommended",
+        "date_of_birth",
         "last_visited",
+        "date_of_join",
     )
-    search_fields = ("user__email",)
-    search_help_text = "Поиск по email"
-    date_hierarchy = "last_visited"
+    search_fields = ("user__email", "phone_number")
+    search_help_text = "Поиск по email, номеру телефона"
+    date_hierarchy = "date_of_join"
 
-    readonly_fields = ("last_visited",)
+    readonly_fields = ("rating",)
     fieldsets = [
         (
             None,
             {
                 "fields": [
                     "user",
-                    "date_of_birth",
+                    "region",
                     "start_of_carrier",
+                    "date_of_birth",
+                    "phone_number",
+                    "is_recommended",
+                    "rating",
                     "skilled_at",
-                    "last_visited",
+                    "description",
                 ]
             },
         ),
@@ -80,34 +89,36 @@ class MasterAdmin(admin.ModelAdmin):
 class SellerAdmin(admin.ModelAdmin):
     list_display = (
         "user",
-        "company_name",
         "region",
+        "company_name",
         "company_phone",
-        "website",
-        "working_hours",
         "seller_phone",
+        "website",
         "company_info",
         "rating",
         "date_of_join",
         # "location",
     )
-    search_fields = ("user__email",)
-    search_help_text = "Поиск по email"
+    search_fields = ("user__email", "company_name", "company_phone", "seller_phone")
+    search_help_text = "Поиск по email, названию компании, номеру телефона компании, номеру телефона продавца"
     date_hierarchy = "date_of_join"
-
-    readonly_fields = "date_of_join", "rating", "date_of_join"
+    list_filter = (
+        "region",
+        "rating",
+    )
+    readonly_fields = "rating", "date_of_join"
     fieldsets = [
         (
             None,
             {
                 "fields": [
                     "user",
-                    "company_name",
                     "region",
+                    "company_name",
                     "company_phone",
+                    "seller_phone",
                     "website",
                     "working_hours",
-                    "seller_phone",
                     "company_info",
                     "rating",
                     "date_of_join",

@@ -29,12 +29,25 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
 
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
     def __str__(self):
         return f"Пользователь {self.email}"
 
 
-class MasterSkill(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+class MasterSkill(MPTTModel):
+    name = models.CharField(max_length=50, unique=True, verbose_name="Название")
+    parent = TreeForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
+        verbose_name="Родительская специализация",
+        help_text="Родительская специализация мастера",
+    )
 
     class Meta:
         verbose_name = "Специализация мастера"
@@ -45,9 +58,15 @@ class MasterSkill(models.Model):
 
 
 class Region(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name="Название")
     parent = TreeForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
+        verbose_name="Регион",
+        help_text="Регион, в котором находится район",
     )
 
     class MPTTMeta:
@@ -119,7 +138,7 @@ class Seller(models.Model):
         related_name="sellers",
     )
     company_phone = models.CharField(
-        max_length=20, blank=True, verbose_name="Номер телефона"
+        max_length=20, blank=True, verbose_name="Номер телефона компании"
     )
     website = models.URLField(blank=True, verbose_name="Сайт")
     working_hours = models.JSONField(
