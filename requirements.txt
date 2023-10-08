@@ -4,4 +4,5 @@ django-soft-delete==0.9.21      #https://github.com/san4ezy/django_softdelete
 django-mptt==0.15.0             #https://django-mptt.readthedocs.io/en/latest/
 django-taggit==4.0.0            #https://django-taggit.readthedocs.io/en/latest/
 Pillow==10.0.1                  #https://pillow.readthedocs.io/en/stable/
-python-decouple==3.8             #https://pypi.org/project/python-decouple/
+python-decouple==3.8            #https://pypi.org/project/python-decouple/
+psycopg2==2.9.9                 #https://www.psycopg.org/docs/

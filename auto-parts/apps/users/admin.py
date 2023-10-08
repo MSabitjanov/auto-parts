@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models.fields.json import JSONField
+from jsoneditor.forms import JSONEditor
 
 from .models import User, Master, Seller, MasterSkill, Region
 
@@ -106,6 +108,7 @@ class SellerAdmin(admin.ModelAdmin):
         "region",
         "rating",
     )
+
     readonly_fields = "rating", "date_of_join"
     fieldsets = [
         (
