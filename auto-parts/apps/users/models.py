@@ -1,7 +1,7 @@
 import os
 from django.db import models
 from django.utils.timezone import now
-
+from django.contrib.gis.db import models as geomodels
 from django.contrib.auth.models import AbstractUser
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -76,7 +76,7 @@ class Region(MPTTModel):
         return f"Регион {self.name}"
 
 
-class Master(models.Model):
+class Master(geomodels.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True, verbose_name="Пользователь"
     )
@@ -122,7 +122,7 @@ class Master(models.Model):
         return f"Мастер {self.user.email}"
 
 
-class Seller(models.Model):
+class Seller(geomodels.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True, verbose_name="Пользователь"
     )
