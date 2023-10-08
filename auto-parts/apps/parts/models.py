@@ -14,6 +14,8 @@ class AutoPartsCategory(MPTTModel):
         null=True,
         blank=True,
         related_name="children",
+        verbose_name="Родительская категория",
+        help_text="Если это родительская категория, то оставьте это поле пустым.",
     )
     characteristics = TaggableManager(
         help_text="Введите характеристики через запятую(Например, если это шина, то радиус, ширина, высота. Если это двигатель, то объем, мощность, тип. )",
@@ -29,7 +31,7 @@ class AutoPartsCategory(MPTTModel):
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name="Название бренда")
 
     class Meta:
         verbose_name = "Бренд"
