@@ -18,4 +18,3 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ("user__email",)
     search_help_text = "Поиск по email"
     readonly_fields = ("content_type", "object_id")
-    # date_hierarchy = ""
