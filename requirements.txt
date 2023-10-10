@@ -5,5 +5,7 @@ django-mptt==0.15.0             #https://django-mptt.readthedocs.io/en/latest/
 django-taggit==4.0.0            #https://django-taggit.readthedocs.io/en/latest/
 Pillow==10.0.1                  #https://pillow.readthedocs.io/en/stable/
 python-decouple==3.8            #https://pypi.org/project/python-decouple/
-psycopg2==2.9.9                 #https://www.psycopg.org/docs/
-GDAL==3.7.2                     #https://pypi.org/project/GDAL/
+psycopg2-binary-2.9.9           #https://www.psycopg.org/docs/
+# GDAL==3.7.2                     #https://pypi.org/project/GDAL/
+django-allauth==0.52.0
+dj-rest-auth[with_social]==4.0.0
