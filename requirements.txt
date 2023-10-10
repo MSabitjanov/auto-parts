@@ -9,3 +9,4 @@ psycopg2-binary==2.9.9           #https://www.psycopg.org/docs/
 # GDAL==3.7.2                     #https://pypi.org/project/GDAL/
 django-allauth==0.52.0
 dj-rest-auth[with_social]==4.0.0
+drf-yasg==1.21.7

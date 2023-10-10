@@ -23,6 +23,7 @@ class User(AbstractUser):
     wishlist_parts = models.ManyToManyField(
         "parts.AutoParts", blank=True, related_name="wishlist_auto_parts"
     )
+    is_active  = models.BooleanField(default=True, verbose_name="Активный")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
