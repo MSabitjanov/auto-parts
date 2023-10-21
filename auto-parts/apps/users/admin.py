@@ -1,4 +1,5 @@
 from django.contrib import admin
+from mptt.admin import MPTTModelAdmin
 
 from .models import User, Master, Seller, MasterSkill, Region
 
@@ -131,7 +132,16 @@ class SellerAdmin(admin.ModelAdmin):
 
 
 @admin.register(MasterSkill)
-class MasterSkillAdmin(admin.ModelAdmin):
+class MasterSkillAdmin(MPTTModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
     search_help_text = "Поиск по названию"
+    mptt_level_indent = 30
+
+
+@admin.register(Region)
+class RegionAdmin(MPTTModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+    search_help_text = "Поиск по названию"
+    mptt_level_indent = 30

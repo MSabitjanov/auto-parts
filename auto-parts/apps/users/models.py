@@ -1,6 +1,7 @@
 import os
 from django.db import models
 from django.utils.timezone import now
+
 # from django.contrib.gis.db import models as geomodels
 from django.contrib.auth.models import AbstractUser
 from mptt.models import MPTTModel, TreeForeignKey
@@ -23,7 +24,7 @@ class User(AbstractUser):
     wishlist_parts = models.ManyToManyField(
         "parts.AutoParts", blank=True, related_name="wishlist_auto_parts"
     )
-    is_active  = models.BooleanField(default=True, verbose_name="Активный")
+    is_active = models.BooleanField(default=True, verbose_name="Активный")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -36,6 +37,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"Пользователь {self.email}"
+
+    def perform_soft_delete(self):
+        self.is_active = False
+        self.save()
 
 
 class MasterSkill(MPTTModel):
@@ -73,13 +78,20 @@ class Region(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ["name"]
 
+    class Meta:
+        verbose_name = "Регион"
+        verbose_name_plural = "Регионы"
+
     def __str__(self):
         return f"Регион {self.name}"
 
 
 class Master(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True, verbose_name="Пользователь"
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        verbose_name="Пользователь",
     )
     date_of_birth = models.DateField(
         blank=True, null=True, verbose_name="Дата рождения"
@@ -91,7 +103,10 @@ class Master(models.Model):
         help_text="Нужен для подсчета опыта работы мастера",
     )
     skilled_at = models.ManyToManyField(
-        MasterSkill, verbose_name="Специализация мастера", related_name="masters"
+        MasterSkill,
+        verbose_name="Специализация мастера",
+        related_name="masters",
+        blank=True,
     )
     last_visited = models.DateTimeField(
         auto_now=True, verbose_name="Последнее посещение"
