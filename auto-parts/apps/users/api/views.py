@@ -9,10 +9,13 @@ from apps.users.models import User, MasterSkill, Region, Master, Seller
 
 from .serializers import (
     MasterSerializer,
+    SellerSerializer,
     UserSerializer,
     MasterSkillSerializer,
     RegionSerializer,
 )
+
+from .permissions import IsOwnerOrReadOnly
 
 
 class UserViewSet(RetrieveUpdateDestroyAPIView):
@@ -39,10 +42,22 @@ class RegionListAPIView(ListAPIView):
 class MasterViewSet(ModelViewSet):
     queryset = Master.objects.all()
     serializer_class = MasterSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         user = self.request.user
         if Master.objects.filter(user=user).exists():
             raise ValidationError("You already have a master profile")
+        serializer.save(user=self.request.user)
+
+
+class SellerViewSet(ModelViewSet):
+    queryset = Seller.objects.all()
+    serializer_class = SellerSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        if Seller.objects.filter(user=user).exists():
+            raise ValidationError("You already have a seller profile")
         serializer.save(user=self.request.user)

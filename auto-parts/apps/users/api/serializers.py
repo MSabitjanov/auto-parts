@@ -36,3 +36,10 @@ class MasterSerializer(ModelSerializer):
             "last_visited",
             "date_of_join",
         )
+
+
+class SellerSerializer(ModelSerializer):
+    class Meta:
+        model = Seller
+        fields = "__all__"
+        read_only_fields = ("user", "date_of_join", "rating")
