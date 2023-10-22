@@ -16,8 +16,8 @@ class Review(models.Model):
         verbose_name="Пользователь",
         related_name="%(class)s_reviews",
     )
-    comment = models.TextField(verbose_name="Комментарий")
-    rating = models.PositiveSmallIntegerField(verbose_name="Оценка")
+    comment = models.TextField(verbose_name="Комментарий", blank=True, null=True)
+    rating = models.PositiveSmallIntegerField(verbose_name="Оценка", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
