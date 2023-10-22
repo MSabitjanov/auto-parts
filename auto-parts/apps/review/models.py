@@ -14,24 +14,44 @@ class Review(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name="Пользователь",
-        related_name="reviews",
+        related_name="%(class)s_reviews",
     )
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    reviewed_object = GenericForeignKey("content_type", "object_id")
     comment = models.TextField(verbose_name="Комментарий")
     rating = models.PositiveSmallIntegerField(verbose_name="Оценка")
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
-    # Setting generic relation in order to get all reviews for a specific part
-    part_reviews = GenericRelation(AutoParts, related_query_name="part_reviews")
-    # Setting generic relation in order to get all reviews for a specific master
-    master_reviews = GenericRelation(Master, related_query_name="master_reviews")
+    class Meta:
+        abstract = True
+
+
+class MasterReview(Review):
+    reviewed_object = models.ForeignKey(
+        Master,
+        on_delete=models.CASCADE,
+        verbose_name="Мастер",
+        related_name="master_reviews",
+    )
 
     class Meta:
-        verbose_name = "Отзыв"
-        verbose_name_plural = "Отзывы"
+        verbose_name = "Отзыв мастера"
+        verbose_name_plural = "Отзывы мастеров"
 
     def __str__(self):
-        return f"Отзыв от {self.user.email}"
+        return f"{self.user} - {self.reviewed_object}"
+
+
+class AutoPartsReview(Review):
+    reviewed_object = models.ForeignKey(
+        AutoParts,
+        on_delete=models.CASCADE,
+        verbose_name="Запчасть",
+        related_name="auto_parts_reviews",
+    )
+
+    class Meta:
+        verbose_name = "Отзыв запчасти"
+        verbose_name_plural = "Отзывы запчастей"
+
+    def __str__(self):
+        return f"{self.user} - {self.reviewed_object}"

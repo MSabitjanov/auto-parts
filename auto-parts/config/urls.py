@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/auth/", include("apps.authentication.urls")),
     path("admin/", admin.site.urls),
     path("api/", include("apps.users.api.urls")),
+    path("api/", include("apps.review.api.urls")),
 ]
 
 urlpatterns += swagger_urls.urlpatterns

@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
+from apps.core.api.api_permissions import IsOwnerOrReadOnly
 
 from .serializers import (
     MasterSerializer,
@@ -14,8 +15,6 @@ from .serializers import (
     MasterSkillSerializer,
     RegionSerializer,
 )
-
-from .permissions import IsOwnerOrReadOnly
 
 
 class UserViewSet(RetrieveUpdateDestroyAPIView):
