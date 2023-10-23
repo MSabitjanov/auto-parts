@@ -24,6 +24,10 @@ class Review(models.Model):
     class Meta:
         abstract = True
 
+    def perform_soft_delete(self):
+        self.active = False
+        self.save()
+
 
 class MasterReview(Review):
     reviewed_object = models.ForeignKey(

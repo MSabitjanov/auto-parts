@@ -6,3 +6,20 @@ class IsOwnerOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return obj.user == request.user
+
+
+class IsSellerOrReadOnly(BasePermission):
+    message = "You must have seller account to perform this action."
+
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.is_authenticated and hasattr(request.user, "seller"):
+            return True
+
+        return False
+
+    # def has_object_permission(self, request, view, obj):
+    #     if request.method in SAFE_METHODS:
+    #         return True
+    #     return obj.seller.user == request.user

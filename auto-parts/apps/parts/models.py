@@ -7,6 +7,10 @@ from apps.users.models import Seller
 
 
 class AutoPartsCategory(MPTTModel):
+    """
+    This model is used to store information about auto parts categories.
+    """
+
     name = models.CharField(max_length=50, unique=True)
     parent = models.ForeignKey(
         "self",
@@ -79,10 +83,11 @@ class AutoParts(models.Model):
         auto_now=True, verbose_name="Последнее обновление"
     )
     rating = models.FloatField(default=0.0, verbose_name="Рейтинг")
+    is_active = models.BooleanField(default=True, verbose_name="Активен")
 
     class Meta:
         verbose_name = "Автозапчасть"
         verbose_name_plural = "Автозапчасти"
 
     def __str__(self):
-        return f"Автозапчасть {self.brand.name} {self.category.name}"
+        return f"Автозапчасть {self.seller}"

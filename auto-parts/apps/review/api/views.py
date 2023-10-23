@@ -31,8 +31,7 @@ class BaseReviewViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.active = False
-        instance.save()
+        instance.perform_soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
