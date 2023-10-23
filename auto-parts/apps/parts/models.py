@@ -91,3 +91,7 @@ class AutoParts(models.Model):
 
     def __str__(self):
         return f"Автозапчасть {self.seller}"
+    
+    def perform_soft_delete(self):
+        self.is_active = False
+        self.save()
