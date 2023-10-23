@@ -20,6 +20,5 @@ class AutoPartSerializer(serializers.ModelSerializer):
         model = AutoParts
         read_only_fields = ["seller", "rating", "is_active"]
         fields = "__all__"
-        # exclude = ("is_active",)
         extra_kwargs = {"is_new": {"required": True}}
         # extra_kwargs = {"brand": {"required": True}, "category": {"required": True}}

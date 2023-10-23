@@ -23,3 +23,10 @@ class IsSellerOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return obj.seller.user == request.user
+    
+
+class IsAutoPartOwnerOrReadOnly(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return obj.auto_part.seller.user == request.user
