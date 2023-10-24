@@ -28,6 +28,7 @@ urlpatterns = [
     path("api/", include("apps.review.api.urls")),
     path("api/", include("apps.parts.api.urls")),
     path("api/", include("apps.images.api.urls")),
+    path("api/", include("apps.communication.api.urls")),
 ]
 
 urlpatterns += swagger_urls.urlpatterns

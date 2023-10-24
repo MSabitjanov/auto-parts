@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -9,7 +10,8 @@ class Chat(models.Model):
     Модель чата, в которой хранятся все чаты пользователей.
     Мастера и покупатели могут общаться только в рамках одного чата.
     """
-
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ManyToManyField(
         User, verbose_name="Пользователь", related_name="chats"
     )

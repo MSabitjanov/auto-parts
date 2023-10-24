@@ -7,6 +7,7 @@ class MasterImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = MasterImages
         fields = "__all__"
+        read_only_fields = ["master"]
 
 
 class AutoPartsImagesSerializer(serializers.ModelSerializer):
