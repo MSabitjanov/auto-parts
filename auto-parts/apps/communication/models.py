@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.forms import ValidationError
 
 User = get_user_model()
 
@@ -10,7 +11,7 @@ class Chat(models.Model):
     Модель чата, в которой хранятся все чаты пользователей.
     Мастера и покупатели могут общаться только в рамках одного чата.
     """
-    
+
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(
         User, verbose_name="Участники", related_name="chats"
@@ -23,7 +24,10 @@ class Chat(models.Model):
     last_message_received_time = models.DateTimeField(
         verbose_name="Время последнего сообщения", blank=True, null=True
     )
-    last_message = models.CharField(max_length=100, verbose_name="Последнее сообщение", blank=True, null=True)
+    last_message = models.CharField(
+        max_length=100, verbose_name="Последнее сообщение", blank=True, null=True
+    )
+    is_active = models.BooleanField(verbose_name="Активный чат", default=True)
 
     class Meta:
         verbose_name = "Чат"

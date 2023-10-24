@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.communication.models import Messages, Chat
 from apps.users.api.serializers import UserSerializerForChat
 
+
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Messages
@@ -11,10 +12,13 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ChatSerializer(serializers.ModelSerializer):
     participants = UserSerializerForChat(many=True, read_only=True)
+
     class Meta:
         model = Chat
         fields = "__all__"
-        read_only_fields = ("last_message_received_time", "id")
+        read_only_fields = ("last_message_received_time", "id", "is_active")
         extra_kwargs = {
-            "user": {"help_text": "User with whom you want to create a chat"}
+            "participants": {
+                "help_text": "User with whom you want to create a chat",
+            }
         }
