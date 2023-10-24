@@ -8,6 +8,7 @@ from .models import User, Master, Seller, MasterSkill, Region
 class UserAdmin(admin.ModelAdmin):
     list_display = (
         "email",
+        "id",
         "first_name",
         "last_name",
     )

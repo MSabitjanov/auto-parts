@@ -21,6 +21,13 @@ class ChatViewSet(ChatViewSet):
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
 
+    def perform_create(self, serializer):
+        """
+        in participants can be only 2 users
+        one user from request and another from url
+        
+        """
+
 
 class MessageViewSet(ListCreateAPIView):
     queryset = Messages.objects.all()

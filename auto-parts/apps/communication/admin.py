@@ -6,13 +6,11 @@ from .models import Chat, Messages
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):
     list_display = (
-        # "id",
-        "seller_name",
-        "customer_name",
+        "id",
         "unread_messages_count",
         "last_message_received_time",
     )
-    # list_display_links = ("id", "seller_name", "customer_name")
+    list_display_links = ("id", "unread_messages_count", "last_message_received_time")
     search_fields = ("user__email",)
     search_help_text = "Email пользователя"
     readonly_fields = ("unread_messages_count", "last_message_received_time")

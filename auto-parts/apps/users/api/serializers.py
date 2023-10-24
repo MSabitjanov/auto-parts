@@ -13,6 +13,12 @@ class UserSerializer(ModelSerializer):
         }
 
 
+class UserSerializerForChat(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "email", "first_name", "last_name")
+
+
 class MasterSkillSerializer(ModelSerializer):
     class Meta:
         model = MasterSkill

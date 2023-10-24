@@ -11,18 +11,19 @@ class Chat(models.Model):
     Мастера и покупатели могут общаться только в рамках одного чата.
     """
     
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ManyToManyField(
-        User, verbose_name="Пользователь", related_name="chats"
+    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False)
+    participants = models.ManyToManyField(
+        User, verbose_name="Участники", related_name="chats"
     )
-    seller_name = models.CharField(max_length=50, verbose_name="Имя продавца")
-    customer_name = models.CharField(max_length=50, verbose_name="Имя покупателя")
+    # seller_name = models.CharField(max_length=50, verbose_name="Имя продавца", blank=True, null=True)
+    # customer_name = models.CharField(max_length=50, verbose_name="Имя покупателя", blank=True, null=True)
     unread_messages_count = models.PositiveSmallIntegerField(
         verbose_name="Количество непрочитанных сообщений", default=0
     )
     last_message_received_time = models.DateTimeField(
-        verbose_name="Время последнего сообщения"
+        verbose_name="Время последнего сообщения", blank=True, null=True
     )
+    last_message = models.CharField(max_length=100, verbose_name="Последнее сообщение", blank=True, null=True)
 
     class Meta:
         verbose_name = "Чат"
