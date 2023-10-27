@@ -108,6 +108,6 @@ class ChatViewSet(ChatViewSet):
             return {}
 
 
-class MessageViewSet(ListCreateAPIView):
+class MessageListCreateAPIView(ListCreateAPIView):
     queryset = Messages.objects.all()
     serializer_class = MessageSerializer
