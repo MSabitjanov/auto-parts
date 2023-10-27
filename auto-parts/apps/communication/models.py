@@ -35,6 +35,10 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"Чат {self.id}"
+    
+    def perform_soft_delete(self):
+        self.is_active = False
+        self.save()
 
 
 class Messages(models.Model):
