@@ -16,8 +16,6 @@ class Chat(models.Model):
     participants = models.ManyToManyField(
         User, verbose_name="Участники", related_name="chats"
     )
-    # seller_name = models.CharField(max_length=50, verbose_name="Имя продавца", blank=True, null=True)
-    # customer_name = models.CharField(max_length=50, verbose_name="Имя покупателя", blank=True, null=True)
     unread_messages_count = models.PositiveSmallIntegerField(
         verbose_name="Количество непрочитанных сообщений", default=0
     )
@@ -41,6 +39,9 @@ class Chat(models.Model):
         self.save()
 
 
+def get_upload_path(instance, filename):
+    return f"{instance.chat.id}/{filename}"
+
 class Messages(models.Model):
     """
     Все сообщения которые отправляются в чате.
@@ -58,7 +59,7 @@ class Messages(models.Model):
     is_read = models.BooleanField(verbose_name="Прочитано", default=False)
     content = models.TextField(verbose_name="Cообщение")
     attachment = models.FileField(
-        upload_to="attachments/", blank=True, verbose_name="Вложение"
+        upload_to=get_upload_path, blank=True, verbose_name="Вложение"
     )
     send_time = models.DateTimeField(auto_now_add=True, verbose_name="Время отправки")
 

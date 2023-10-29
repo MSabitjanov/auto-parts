@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import mixins, viewsets
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,6 +11,7 @@ from rest_framework.settings import api_settings
 from rest_framework.permissions import IsAuthenticated
 
 from apps.communication.models import Messages, Chat
+from apps.core.api.api_permissions import IsChatParticipant
 
 from .serializers import MessageSerializer, ChatSerializer
 
@@ -111,3 +112,34 @@ class ChatViewSet(ChatViewSet):
 class MessageListCreateAPIView(ListCreateAPIView):
     queryset = Messages.objects.all()
     serializer_class = MessageSerializer
+    lookup_field = "chat_id"
+    permission_classes = [IsAuthenticated, IsChatParticipant]
+
+    def get_queryset(self):
+        chat = self.validate_and_get_chat()
+        return super().get_queryset().filter(chat=chat)
+
+    def perform_create(self, serializer):
+        chat = self.validate_and_get_chat()
+        serializer.save(sender=self.request.user, chat=chat)
+
+    def validate_and_get_chat(self):
+        chat_id = self.kwargs.get("chat_id")
+        chat = get_object_or_404(Chat.objects.all(), id=chat_id)
+        return chat
+    
+
+class MessageUpdateAPIView(UpdateAPIView):
+    queryset = Messages.objects.all()
+    serializer_class = MessageSerializer
+    lookup_field = "message_id"
+    permission_classes = [IsAuthenticated, IsChatParticipant]
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter_kwargs = {
+            'chat__id': self.kwargs.get('chat_id'),
+            'id': self.kwargs.get('message_id')
+        }
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        return obj
