@@ -31,9 +31,11 @@ class BrandSerializer(serializers.ModelSerializer):
 
 
 class AutoPartSerializer(serializers.ModelSerializer):
+    seller = serializers.CharField(source="seller.company_name", read_only=True)
+
     class Meta:
         model = AutoParts
         read_only_fields = ["seller", "rating", "is_active"]
-        fields = "__all__"
+        fields = "id", "seller", "is_new", "price", "date_of_pubication", "rating"
         extra_kwargs = {"is_new": {"required": True}}
         # extra_kwargs = {"brand": {"required": True}, "category": {"required": True}}

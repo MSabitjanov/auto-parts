@@ -18,6 +18,15 @@ class AutoPartsCategoryListAPIView(ListAPIView):
     serializer_class = AutoPartsCategorySerializer
 
 
+class AutoPartByCategory(ListAPIView):
+    serializer_class = AutoPartSerializer
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("category_id")
+        return AutoParts.objects.filter(category_id=category_id)
+    
+
+
 class BrandListAPIView(ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
