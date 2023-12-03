@@ -14,7 +14,7 @@ from .serializers import (
 
 
 class AutoPartsCategoryListAPIView(ListAPIView):
-    queryset = AutoPartsCategory.objects.all()
+    queryset = AutoPartsCategory.objects.prefetch_related('children')
     serializer_class = AutoPartsCategorySerializer
 
 
