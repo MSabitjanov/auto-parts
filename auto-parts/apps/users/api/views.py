@@ -4,6 +4,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.core.api.api_permissions import IsOwnerOrReadOnly
@@ -14,6 +17,7 @@ from .serializers import (
     UserSerializer,
     MasterSkillSerializer,
     RegionSerializer,
+    EmailAuthTokenSerializer,
 )
 
 
@@ -60,3 +64,19 @@ class SellerViewSet(ModelViewSet):
         if Seller.objects.filter(user=user).exists():
             raise ValidationError("You already have a seller profile")
         serializer.save(user=self.request.user)
+
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    """
+    Custom view to obtain a token by providing email and password.
+    """
+
+    serializer_class = EmailAuthTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
