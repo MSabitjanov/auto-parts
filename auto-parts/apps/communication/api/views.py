@@ -35,7 +35,10 @@ class ChatViewSet(ChatViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(participants=self.request.user, is_active=True)
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(participants=self.request.user, is_active=True)
+        else:
+            return self.queryset.none()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -127,7 +130,7 @@ class MessageListCreateAPIView(ListCreateAPIView):
         chat_id = self.kwargs.get("chat_id")
         chat = get_object_or_404(Chat.objects.all(), id=chat_id)
         return chat
-    
+
 
 class MessageUpdateAPIView(UpdateAPIView):
     queryset = Messages.objects.all()
@@ -138,8 +141,8 @@ class MessageUpdateAPIView(UpdateAPIView):
     def get_object(self):
         queryset = self.get_queryset()
         filter_kwargs = {
-            'chat__id': self.kwargs.get('chat_id'),
-            'id': self.kwargs.get('message_id')
+            "chat__id": self.kwargs.get("chat_id"),
+            "id": self.kwargs.get("message_id"),
         }
         obj = get_object_or_404(queryset, **filter_kwargs)
         return obj

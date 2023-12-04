@@ -22,7 +22,7 @@ class UserSerializerForChat(ModelSerializer):
         fields = ("id", "email", "first_name", "last_name")
 
 
-class RecursiveSerializer(serializers.Serializer):
+class RecursiveMasterSkillSerializer(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
@@ -35,7 +35,7 @@ class FilterMasterSkillSerializer(serializers.ListSerializer):
 
 
 class MasterSkillSerializer(ModelSerializer):
-    children = RecursiveSerializer(many=True)
+    children = RecursiveMasterSkillSerializer(many=True)
 
     class Meta:
         list_serializer_class = FilterMasterSkillSerializer

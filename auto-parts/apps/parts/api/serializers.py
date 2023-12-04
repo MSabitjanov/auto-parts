@@ -4,10 +4,13 @@ from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.images.api.serializers import AutoPartsImagesSerializer
 
 
-class RecursiveSerializer(serializers.Serializer):
+class RecursivePartCategorySerializer(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
+
+    class Meta:
+        ref_name = "RecursivePartSerializer"
 
 
 class FilterCommentListSerializer(serializers.ListSerializer):
@@ -17,7 +20,7 @@ class FilterCommentListSerializer(serializers.ListSerializer):
 
 
 class AutoPartsCategorySerializer(serializers.ModelSerializer):
-    children = RecursiveSerializer(many=True)
+    children = RecursivePartCategorySerializer(many=True)
 
     class Meta:
         list_serializer_class = FilterCommentListSerializer
