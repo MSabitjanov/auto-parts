@@ -14,7 +14,7 @@ from .serializers import (
 
 
 class AutoPartsCategoryListAPIView(ListAPIView):
-    queryset = AutoPartsCategory.objects.prefetch_related('children')
+    queryset = AutoPartsCategory.objects.prefetch_related("children")
     serializer_class = AutoPartsCategorySerializer
 
 
@@ -23,8 +23,9 @@ class AutoPartByCategory(ListAPIView):
 
     def get_queryset(self):
         category_id = self.kwargs.get("category_id")
-        return AutoParts.objects.filter(category_id=category_id)
-    
+        category = AutoPartsCategory.objects.get(id=category_id)
+        descendants = category.get_descendants(include_self=True)
+        return AutoParts.objects.filter(category__in=descendants)
 
 
 class BrandListAPIView(ListAPIView):
@@ -39,7 +40,7 @@ class AutoPartViewSet(ModelViewSet):
 
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
-    
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.perform_soft_delete()

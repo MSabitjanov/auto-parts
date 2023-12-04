@@ -22,10 +22,25 @@ class UserSerializerForChat(ModelSerializer):
         fields = ("id", "email", "first_name", "last_name")
 
 
+class RecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+
+class FilterMasterSkillSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        data = data.filter(parent=None)
+        return super().to_representation(data)
+
+
 class MasterSkillSerializer(ModelSerializer):
+    children = RecursiveSerializer(many=True)
+
     class Meta:
+        list_serializer_class = FilterMasterSkillSerializer
         model = MasterSkill
-        fields = "id", "name", "parent"
+        fields = "id", "name", "children"
 
 
 class RegionSerializer(ModelSerializer):
@@ -35,6 +50,9 @@ class RegionSerializer(ModelSerializer):
 
 
 class MasterSerializer(ModelSerializer):
+    skilled_at = MasterSkillSerializer(many=True)
+    master_name = serializers.CharField(source="user.get_full_name", read_only=True)
+
     class Meta:
         model = Master
         fields = "__all__"
@@ -59,19 +77,20 @@ class EmailAuthTokenSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
+        email = attrs.get("email")
+        password = attrs.get("password")
 
         if email and password:
-            user = authenticate(request=self.context.get('request'),
-                                email=email, password=password)
+            user = authenticate(
+                request=self.context.get("request"), email=email, password=password
+            )
 
             if not user:
-                msg = 'Unable to log in with provided credentials.'
-                raise serializers.ValidationError(msg, code='authorization')
+                msg = "Unable to log in with provided credentials."
+                raise serializers.ValidationError(msg, code="authorization")
         else:
             msg = 'Must include "email" and "password".'
-            raise serializers.ValidationError(msg, code='authorization')
+            raise serializers.ValidationError(msg, code="authorization")
 
-        attrs['user'] = user
+        attrs["user"] = user
         return attrs

@@ -54,6 +54,14 @@ class MasterViewSet(ModelViewSet):
         serializer.save(user=self.request.user)
 
 
+class MasterBySkillListAPIView(ListAPIView):
+    serializer_class = MasterSerializer
+
+    def get_queryset(self):
+        skill_id = self.kwargs.get("skill_id")
+        return Master.objects.filter(skilled_at__id=skill_id)
+
+
 class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
@@ -74,9 +82,10 @@ class CustomObtainAuthToken(ObtainAuthToken):
     serializer_class = EmailAuthTokenSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+        user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        return Response({"token": token.key})

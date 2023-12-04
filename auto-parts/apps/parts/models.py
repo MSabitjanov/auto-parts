@@ -70,6 +70,7 @@ class AutoParts(models.Model):
     seller = models.ForeignKey(
         Seller, on_delete=models.SET_NULL, null=True, verbose_name="Продавец"
     )
+    name = models.CharField(max_length=50, verbose_name="Название")
     is_new = models.BooleanField(default=True, verbose_name="Новый")
     price = models.PositiveIntegerField(verbose_name="Цена")
     description = models.TextField(blank=True, verbose_name="Описание")
@@ -91,7 +92,7 @@ class AutoParts(models.Model):
 
     def __str__(self):
         return f"Автозапчасть {self.seller}"
-    
+
     def perform_soft_delete(self):
         self.is_active = False
         self.save()

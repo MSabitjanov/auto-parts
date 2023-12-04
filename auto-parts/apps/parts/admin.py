@@ -1,17 +1,21 @@
 from django.contrib import admin
 
+from mptt.admin import MPTTModelAdmin
+
 from .models import AutoPartsCategory, Brand, AutoParts
 
 
 @admin.register(AutoPartsCategory)
-class AutoPartsCategoryAdmin(admin.ModelAdmin):
+class AutoPartsCategoryAdmin(MPTTModelAdmin):
     list_display = (
         "name",
+        "id",
         "parent",
         "characteristics",
     )
     list_filter = ("parent",)
     search_fields = ("name",)
+    mptt_level_indent = 30
 
 
 @admin.register(Brand)
@@ -25,6 +29,7 @@ class BrandAdmin(admin.ModelAdmin):
 class AutoPartsAdmin(admin.ModelAdmin):
     list_display = (
         "category",
+        "id",
         "brand",
         "seller",
         "is_new",
