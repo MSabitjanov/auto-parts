@@ -52,6 +52,7 @@ class RegionSerializer(ModelSerializer):
 class MasterSerializer(ModelSerializer):
     skilled_at = MasterSkillSerializer(many=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Master
@@ -62,7 +63,13 @@ class MasterSerializer(ModelSerializer):
             "rating",
             "last_visited",
             "date_of_join",
+            "image_url",
         )
+
+    def get_image_url(self, obj):
+        if obj.images.exists():
+            return obj.images.first().image.url
+        return None
 
 
 class SellerSerializer(ModelSerializer):

@@ -59,7 +59,9 @@ class MasterBySkillListAPIView(ListAPIView):
 
     def get_queryset(self):
         skill_id = self.kwargs.get("skill_id")
-        return Master.objects.filter(skilled_at__id=skill_id)
+        skill = MasterSkill.objects.get(id=skill_id)
+        descendants = skill.get_descendants(include_self=True)
+        return Master.objects.filter(skilled_at__in=descendants)
 
 
 class SellerViewSet(ModelViewSet):

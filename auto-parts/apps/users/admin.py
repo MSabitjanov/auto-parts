@@ -134,7 +134,7 @@ class SellerAdmin(admin.ModelAdmin):
 
 @admin.register(MasterSkill)
 class MasterSkillAdmin(MPTTModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "id", "parent")
     search_fields = ("name",)
     search_help_text = "Поиск по названию"
     mptt_level_indent = 30
