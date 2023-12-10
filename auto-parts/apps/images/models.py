@@ -16,7 +16,7 @@ def get_upload_path_for_part(instance, filename):
     return f"auto_parts_by/{instance.auto_part.seller.user.email}/{filename}"
 
 def get_upload_path_for_seller(instance, filename):
-    return f"seller_images/{instance.seller.user.email}/{filename}"
+    return f"seller_images/{instance.uploaded_by.email}/{filename}"
 
 
 class MasterImages(models.Model):
@@ -88,4 +88,4 @@ class SellerImage(models.Model):
         verbose_name_plural = "Изображения продавцов"
 
     def __str__(self):
-        return f"Изображение продавца {self.seller.user.email}"
+        return f"Изображение продавца {self.uploaded_by.email}"

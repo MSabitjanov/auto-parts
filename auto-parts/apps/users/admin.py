@@ -126,6 +126,7 @@ class SellerAdmin(admin.ModelAdmin):
                     "company_info",
                     "rating",
                     "date_of_join",
+                    "seller_images",
                     # "location",
                 ]
             },
