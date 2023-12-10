@@ -77,6 +77,7 @@ class MasterAdmin(admin.ModelAdmin):
                     "start_of_carrier",
                     "date_of_birth",
                     "phone_number",
+                    "website",
                     "is_recommended",
                     "rating",
                     "skilled_at",

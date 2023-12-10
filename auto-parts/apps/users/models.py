@@ -119,6 +119,7 @@ class Master(models.Model):
     )
     description = models.TextField(blank=True, verbose_name="Описание")
     is_recommended = models.BooleanField(default=False, verbose_name="Рекомендованный")
+    website = models.URLField(null=True, blank=True, verbose_name="Сайт")
     rating = models.FloatField(default=0.0, verbose_name="Рейтинг")
     region = models.ForeignKey(
         Region,
