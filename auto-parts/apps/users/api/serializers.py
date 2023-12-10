@@ -49,10 +49,25 @@ class MasterSkillSerializerAll(ModelSerializer):
         fields = "id", "name"
 
 
+class RegionRecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+
+class FilterRegionSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        data = data.filter(parent=None)
+        return super().to_representation(data)
+
+
 class RegionSerializer(ModelSerializer):
+    children = RegionRecursiveSerializer(many=True)
+
     class Meta:
+        list_serializer_class = FilterRegionSerializer
         model = Region
-        fields = "id", "name", "parent"
+        fields = "id", "name", "children"
 
 
 class MasterSerializer(ModelSerializer):
