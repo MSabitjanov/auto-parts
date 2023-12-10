@@ -1,7 +1,11 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from apps.users.models import Master
 from apps.parts.models import AutoParts
+
+
+User = get_user_model() # noqa
 
 
 def get_upload_path_for_master(instance, filename):
@@ -10,6 +14,9 @@ def get_upload_path_for_master(instance, filename):
 
 def get_upload_path_for_part(instance, filename):
     return f"auto_parts_by/{instance.auto_part.seller.user.email}/{filename}"
+
+def get_upload_path_for_seller(instance, filename):
+    return f"seller_images/{instance.seller.user.email}/{filename}"
 
 
 class MasterImages(models.Model):
@@ -56,3 +63,29 @@ class AutoPartsImages(models.Model):
 
     def __str__(self):
         return f"Изображение автозапчасти {self.auto_part.id}"
+
+
+class SellerImage(models.Model):
+    """
+    Модель изображений продавцов.
+    """
+
+    image = models.ImageField(
+        upload_to=get_upload_path_for_seller, verbose_name="Изображение"
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Загружено")
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Загрузил",
+        related_name="images",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "Изображение продавца"
+        verbose_name_plural = "Изображения продавцов"
+
+    def __str__(self):
+        return f"Изображение продавца {self.seller.user.email}"

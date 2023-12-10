@@ -48,3 +48,11 @@ class AutoPartViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(seller=self.request.user.seller, is_active=True)
+
+
+class SellerAutoParts(ListAPIView):
+    serializer_class = AutoPartSerializer
+
+    def get_queryset(self):
+        seller_id = self.kwargs.get("seller_id")
+        return AutoParts.objects.filter(seller_id=seller_id)
