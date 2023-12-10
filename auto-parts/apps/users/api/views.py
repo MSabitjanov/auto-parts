@@ -18,6 +18,7 @@ from .serializers import (
     MasterSkillSerializer,
     RegionSerializer,
     EmailAuthTokenSerializer,
+    MasterSkillSerializerAll,
 )
 
 
@@ -35,6 +36,11 @@ class UserViewSet(RetrieveUpdateDestroyAPIView):
 class MasterSkillListAPIView(ListAPIView):
     queryset = MasterSkill.objects.all()
     serializer_class = MasterSkillSerializer
+
+
+class MasterSkillListAllAPIView(ListAPIView):
+    queryset = MasterSkill.objects.all()
+    serializer_class = MasterSkillSerializerAll
 
 
 class RegionListAPIView(ListAPIView):

@@ -7,6 +7,7 @@ from .views import (
     MasterBySkillListAPIView,
     RegionListAPIView,
     CustomObtainAuthToken,
+    MasterSkillListAllAPIView,
 )
 from .routers import router
 
@@ -19,6 +20,7 @@ urlpatterns = [
         name="master-by-skill-list",
     ),
     path("master-skills/", MasterSkillListAPIView.as_view(), name="master-skills-list"),
+    path("master-skills-all/", MasterSkillListAllAPIView.as_view(), name="master-skills-list-all"),
     path("regions/", RegionListAPIView.as_view(), name="regions-list"),
     path("user/api-token-auth/", CustomObtainAuthToken.as_view()),
 ]

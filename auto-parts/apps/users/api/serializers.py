@@ -43,6 +43,12 @@ class MasterSkillSerializer(ModelSerializer):
         fields = "id", "name", "children"
 
 
+class MasterSkillSerializerAll(ModelSerializer):
+    class Meta:
+        model = MasterSkill
+        fields = "id", "name"
+
+
 class RegionSerializer(ModelSerializer):
     class Meta:
         model = Region
