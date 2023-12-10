@@ -49,6 +49,7 @@ class MasterSkillSerializerAll(ModelSerializer):
         fields = "id", "name"
 
 
+
 class RegionRecursiveSerializer(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
@@ -71,7 +72,7 @@ class RegionSerializer(ModelSerializer):
 
 
 class MasterSerializer(ModelSerializer):
-    skilled_at = MasterSkillSerializer(many=True)
+    skilled_at = MasterSkillSerializerAll(many=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
 
@@ -86,6 +87,7 @@ class MasterSerializer(ModelSerializer):
             "date_of_join",
             "image_url",
         )
+        depth = 1
 
     def get_image_url(self, obj):
         if obj.images.exists():
