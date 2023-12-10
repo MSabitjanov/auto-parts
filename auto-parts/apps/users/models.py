@@ -169,6 +169,9 @@ class Seller(models.Model):
     date_of_join = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата регистрации"
     )
+    seller_images = models.ManyToManyField(
+        "images.SellerImage", blank=True, related_name="sellers"
+    )
     # location = models.PointField(blank=True, null=True, verbose_name="Местоположение")
 
     class Meta:
