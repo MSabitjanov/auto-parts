@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
-
+from apps.images.api.serializers import SellerImagesSerializer
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -124,6 +124,8 @@ class MasterListSerializer(ModelSerializer):
 
 
 class SellerSerializer(ModelSerializer):
+    seller_images = SellerImagesSerializer(many=True, read_only=True)
+
     class Meta:
         model = Seller
         fields = "__all__"
