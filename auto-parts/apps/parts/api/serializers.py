@@ -43,7 +43,7 @@ class BrandSerializer(serializers.ModelSerializer):
 class AutoPartSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(read_only=True)
     category = AutoPartsCategorySerializer(read_only=True)
-    seller = serializers.CharField(source="seller.company_name", read_only=True)
+    company_name = serializers.CharField(source="seller.company_name", read_only=True)
     image_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -54,6 +54,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
             "category",
             "brand",
             "seller",
+            "company_name",
             "name",
             "description",
             "characteristics",
