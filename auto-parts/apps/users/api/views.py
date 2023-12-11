@@ -1,17 +1,18 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-
+from rest_framework import mixins
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.core.api.api_permissions import IsOwnerOrReadOnly
 
 from .serializers import (
+    MasterListSerializer,
     MasterSerializer,
     SellerSerializer,
     UserSerializer,
@@ -48,7 +49,20 @@ class RegionListAPIView(ListAPIView):
     serializer_class = RegionSerializer
 
 
-class MasterViewSet(ModelViewSet):
+class CustomMasterModelViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    GenericViewSet):
+
+    pass
+
+
+class MasterViewSet(CustomMasterModelViewSet):
+    """
+    Serves all methods except list.
+    """
     queryset = Master.objects.all()
     serializer_class = MasterSerializer
     permission_classes = [IsOwnerOrReadOnly]
@@ -58,6 +72,11 @@ class MasterViewSet(ModelViewSet):
         if Master.objects.filter(user=user).exists():
             raise ValidationError("You already have a master profile")
         serializer.save(user=self.request.user)
+
+
+class MasterListAPIView(ListAPIView):
+    queryset = Master.objects.all()
+    serializer_class = MasterListSerializer
 
 
 class MasterBySkillListAPIView(ListAPIView):
