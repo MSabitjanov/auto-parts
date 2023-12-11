@@ -15,7 +15,7 @@ from .routers import router
 urlpatterns = [
     path("", include(router.urls)),
     path("masters/", MasterListAPIView.as_view(), name="master-list"),
-    path("user/<int:pk>/", UserViewSet.as_view()),
+    path("user/", UserViewSet.as_view()),
     path(
         "master/skill/<int:skill_id>/",
         MasterBySkillListAPIView.as_view(),

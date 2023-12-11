@@ -8,6 +8,9 @@ from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.images.api.serializers import SellerImagesSerializer
 
 class UserSerializer(ModelSerializer):
+    is_seller = serializers.SerializerMethodField()
+    is_master = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         exclude = "is_superuser", "is_staff", "groups", "user_permissions"
@@ -16,6 +19,11 @@ class UserSerializer(ModelSerializer):
             "is_active": {"read_only": True},
         }
 
+    def get_is_seller(self, obj):
+        return hasattr(obj, "seller")
+    
+    def get_is_master(self, obj):
+        return hasattr(obj, "master")
 
 class UserSerializerForChat(ModelSerializer):
     class Meta:

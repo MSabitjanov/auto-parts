@@ -28,6 +28,9 @@ class UserViewSet(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_object(self):
+        return self.request.user
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.perform_soft_delete()
