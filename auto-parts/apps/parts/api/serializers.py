@@ -28,6 +28,12 @@ class AutoPartsCategorySerializer(serializers.ModelSerializer):
         fields = "id", "name", "children"
 
 
+class AutoPartListCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AutoPartsCategory
+        fields = "id", "name", "parent"
+
+
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand

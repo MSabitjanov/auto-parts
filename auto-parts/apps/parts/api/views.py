@@ -7,6 +7,7 @@ from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.core.api.api_permissions import IsOwnerOrReadOnly, IsSellerOrReadOnly
 
 from .serializers import (
+    AutoPartListCategorySerializer,
     AutoPartsCategorySerializer,
     BrandSerializer,
     AutoPartSerializer,
@@ -14,8 +15,19 @@ from .serializers import (
 
 
 class AutoPartsCategoryListAPIView(ListAPIView):
+    """
+    Для рекурсивного вывода категорий
+    """
     queryset = AutoPartsCategory.objects.prefetch_related("children")
     serializer_class = AutoPartsCategorySerializer
+
+
+class AutoPartCategoriesListAPIView(ListAPIView):
+    """
+    Для вывода категорий без рекурсии
+    """
+    queryset = AutoPartsCategory.objects.all()
+    serializer_class = AutoPartListCategorySerializer
 
 
 class AutoPartByCategory(ListAPIView):
