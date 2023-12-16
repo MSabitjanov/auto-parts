@@ -20,7 +20,7 @@ class AutoPartsCategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "id")
     list_filter = ("name",)
     search_fields = ("name",)
 
