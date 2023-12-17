@@ -14,6 +14,7 @@ from apps.core.api.api_permissions import IsOwnerOrReadOnly
 from .serializers import (
     MasterListSerializer,
     MasterSerializer,
+    MasterReadSerializer,
     SellerSerializer,
     UserSerializer,
     MasterSkillSerializer,
@@ -67,8 +68,12 @@ class MasterViewSet(CustomMasterModelViewSet):
     Serves all methods except list.
     """
     queryset = Master.objects.all()
-    serializer_class = MasterSerializer
     permission_classes = [IsOwnerOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return MasterReadSerializer
+        return MasterSerializer
 
     def perform_create(self, serializer):
         user = self.request.user
