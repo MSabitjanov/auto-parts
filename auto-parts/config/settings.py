@@ -209,5 +209,5 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
 CORS_ALLOW_ALL_ORIGINS = True
 
 # GDAL
-import os
-GDAL_LIBRARY_PATH = os.path.join("C:\\Program Files\\GDAL", "gdal.dll")
+# import os
+# GDAL_LIBRARY_PATH = os.path.join("C:\\Program Files\\GDAL", "gdal.dll")
