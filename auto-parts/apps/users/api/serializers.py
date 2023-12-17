@@ -101,7 +101,7 @@ class MasterSerializer(ModelSerializer):
 
     def get_image_url(self, obj):
         if obj.images.exists():
-            return obj.images.first().image.url
+            return [image.image.url for image in obj.images.all()]
         return None
 
 
