@@ -131,7 +131,7 @@ class Master(models.Model):
     )
     address = models.CharField(max_length=255, null=True, blank=True, verbose_name="Адрес")
     company_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Название Компании")
-    # location = models.PointField(blank=True, null=True, verbose_name="Местоположение")
+    location = models.PointField(blank=True, null=True, verbose_name="Местоположение")
 
     class Meta:
         verbose_name = "Мастер"

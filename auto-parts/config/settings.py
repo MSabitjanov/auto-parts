@@ -38,7 +38,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "django.contrib.gis",
+    "django.contrib.gis",
 ]
 
 THIRD_PARTY_APPS = [
@@ -106,7 +106,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": config("POSTGRES_DB"),
         "USER": config("POSTGRES_USER"),
         "PASSWORD": config("POSTGRES_PASSWORD"),
@@ -207,3 +207,7 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
 
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
+
+# GDAL
+import os
+GDAL_LIBRARY_PATH = os.path.join("C:\\Program Files\\GDAL", "gdal.dll")
