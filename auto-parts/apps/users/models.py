@@ -129,8 +129,12 @@ class Master(models.Model):
         verbose_name="Регион",
         related_name="masters",
     )
-    address = models.CharField(max_length=255, null=True, blank=True, verbose_name="Адрес")
-    company_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="Название Компании")
+    address = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name="Адрес"
+    )
+    company_name = models.CharField(
+        max_length=100, null=True, blank=True, verbose_name="Название Компании"
+    )
     # location = models.PointField(blank=True, null=True, verbose_name="Местоположение")
 
     class Meta:

@@ -52,7 +52,8 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "drf_yasg",
-    'corsheaders',
+    "corsheaders",
+    "modeltranslation",
 ]
 
 LOCAL_APPS = [
@@ -146,6 +147,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+LANGUAGES = [
+    ("en", "English"),
+    ("ru", "Russian"),
+    ("uz", "Uzbek"),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

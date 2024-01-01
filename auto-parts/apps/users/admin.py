@@ -1,6 +1,8 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
+from modeltranslation.admin import TranslationAdmin
+
 from .models import User, Master, Seller, MasterSkill, Region
 
 
