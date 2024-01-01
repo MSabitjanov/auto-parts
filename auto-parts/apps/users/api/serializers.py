@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
-from apps.images.api.serializers import SellerImagesSerializer
+from apps.images.api.serializers import SellerImagesSerializer, MasterImagesSerializer
+
 
 class UserSerializer(ModelSerializer):
     is_seller = serializers.SerializerMethodField()
@@ -21,9 +22,10 @@ class UserSerializer(ModelSerializer):
 
     def get_is_seller(self, obj):
         return hasattr(obj, "seller")
-    
+
     def get_is_master(self, obj):
         return hasattr(obj, "master")
+
 
 class UserSerializerForChat(ModelSerializer):
     class Meta:
@@ -58,7 +60,6 @@ class MasterSkillSerializerAll(ModelSerializer):
         fields = "id", "name"
 
 
-
 class RegionRecursiveSerializer(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
@@ -84,6 +85,7 @@ class MasterSerializer(ModelSerializer):
     """
     Serializer for master profile. Serves all methods except list.
     """
+
     skilled_at = serializers.PrimaryKeyRelatedField(
         queryset=MasterSkill.objects.all(),
         many=True,
@@ -114,6 +116,7 @@ class MasterReadSerializer(ModelSerializer):
     """
     Serializer for master profile. Serves all methods except list.
     """
+
     skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
@@ -132,7 +135,14 @@ class MasterReadSerializer(ModelSerializer):
 
     def get_image_url(self, obj):
         if obj.images.exists():
-            return [image.image.url for image in obj.images.all()]
+            images_data = []
+            for image in obj.images.all():
+                image_data = {
+                    "id": image.id,
+                    "url": image.image.url,
+                }
+                images_data.append(image_data)
+            return images_data
         return None
 
 
@@ -140,6 +150,7 @@ class MasterListSerializer(ModelSerializer):
     """
     Serializer for master profile. Serves only list method.
     """
+
     skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()

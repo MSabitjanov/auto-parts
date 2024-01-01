@@ -4,6 +4,7 @@ from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.images.api.serializers import AutoPartsImagesSerializer
 from apps.parts.utils import normalize_brand_name
 
+
 class RecursivePartCategorySerializer(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
@@ -42,7 +43,9 @@ class BrandSerializer(serializers.ModelSerializer):
 
 class AutoPartSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(required=False)
-    category = serializers.PrimaryKeyRelatedField(queryset=AutoPartsCategory.objects.all(), required=False)
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=AutoPartsCategory.objects.all(), required=False
+    )
     company_name = serializers.CharField(source="seller.company_name", read_only=True)
     image_url = serializers.SerializerMethodField()
 
@@ -68,11 +71,15 @@ class AutoPartSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['category'] = AutoPartsCategorySerializer(instance.category).data
+        representation["category"] = AutoPartsCategorySerializer(instance.category).data
         return representation
 
     def create(self, validated_data):
-        brand_name = validated_data.pop("brand").get("name") if "brand" in validated_data else None
+        brand_name = (
+            validated_data.pop("brand").get("name")
+            if "brand" in validated_data
+            else None
+        )
 
         if brand_name:
             noramlized_brand_name = normalize_brand_name(brand_name)
@@ -84,5 +91,9 @@ class AutoPartSerializer(serializers.ModelSerializer):
 
     def get_image_url(self, obj):
         if obj.images.exists():
-            return [image.image.url for image in obj.images.all()]
+            image_urls = []
+            for image in obj.images.all():
+                image_data = {"id": image.id, "image_url": image.image.url}
+                image_urls.append(image_data)
+            return image_urls
         return None
