@@ -8,6 +8,9 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
+from django.db.models import Avg
+from django.db.models.functions import Coalesce
+
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.core.api.api_permissions import IsOwnerOrReadOnly
 
@@ -85,6 +88,10 @@ class MasterViewSet(CustomMasterModelViewSet):
 class MasterListAPIView(ListAPIView):
     queryset = Master.objects.all()
     serializer_class = MasterListSerializer
+
+    def get_queryset(self):
+        queryset = Master.objects.annotate(average_rating=Avg('master_reviews__rating'))
+        return queryset.order_by('-average_rating')
 
 
 class MasterBySkillListAPIView(ListAPIView):

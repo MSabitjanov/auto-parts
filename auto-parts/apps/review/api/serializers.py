@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.review.models import MasterReview, AutoPartsReview
 
@@ -18,6 +18,11 @@ class MasterReviewSerializer(ModelSerializer):
             "user",
             "created_at",
         )
+    
+    def validate_rating(self, value):
+        if value not in range(1, 6):
+            raise ValidationError("Rating must be in range 1-5")
+        return value
 
 
 class AutoPartsReviewSerializer(ModelSerializer):
@@ -35,3 +40,8 @@ class AutoPartsReviewSerializer(ModelSerializer):
             "user",
             "created_at",
         )
+
+    def validate_rating(self, value):
+        if value not in range(1, 6):
+            raise ValidationError("Rating must be in range 1-5")
+        return value
