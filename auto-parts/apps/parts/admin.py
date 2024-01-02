@@ -1,12 +1,13 @@
 from django.contrib import admin
 
 from mptt.admin import MPTTModelAdmin
+from modeltranslation.admin import TranslationAdmin
 
 from .models import AutoPartsCategory, Brand, AutoParts
 
 
 @admin.register(AutoPartsCategory)
-class AutoPartsCategoryAdmin(MPTTModelAdmin):
+class AutoPartsCategoryAdmin(MPTTModelAdmin, TranslationAdmin):
     list_display = (
         "name",
         "id",
@@ -19,14 +20,14 @@ class AutoPartsCategoryAdmin(MPTTModelAdmin):
 
 
 @admin.register(Brand)
-class BrandAdmin(admin.ModelAdmin):
+class BrandAdmin(TranslationAdmin):
     list_display = ("name", "id")
     list_filter = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(AutoParts)
-class AutoPartsAdmin(admin.ModelAdmin):
+class AutoPartsAdmin(TranslationAdmin):
     list_display = (
         "category",
         "id",

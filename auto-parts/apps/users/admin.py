@@ -137,7 +137,7 @@ class SellerAdmin(TranslationAdmin):
 
 
 @admin.register(MasterSkill)
-class MasterSkillAdmin(MPTTModelAdmin):
+class MasterSkillAdmin(MPTTModelAdmin, TranslationAdmin):
     list_display = ("name", "id", "parent")
     search_fields = ("name",)
     search_help_text = "Поиск по названию"
@@ -145,7 +145,7 @@ class MasterSkillAdmin(MPTTModelAdmin):
 
 
 @admin.register(Region)
-class RegionAdmin(MPTTModelAdmin):
+class RegionAdmin(MPTTModelAdmin, TranslationAdmin):
     list_display = ("name",)
     search_fields = ("name",)
     search_help_text = "Поиск по названию"
