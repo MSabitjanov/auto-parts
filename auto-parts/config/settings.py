@@ -153,9 +153,10 @@ LANGUAGES = [
     ("uz", "Uzbek"),
 ]
 
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 MODELTRANSLATION_TRANSLATION_FILES = (
     'apps.users.translation',
+    'apps.parts.translation',
 )
 
 # Static files (CSS, JavaScript, Images)
