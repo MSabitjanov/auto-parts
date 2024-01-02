@@ -52,7 +52,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(Master)
-class MasterAdmin(admin.ModelAdmin):
+class MasterAdmin(TranslationAdmin):
     list_display = (
         "user",
         "region",
@@ -91,7 +91,7 @@ class MasterAdmin(admin.ModelAdmin):
 
 
 @admin.register(Seller)
-class SellerAdmin(admin.ModelAdmin):
+class SellerAdmin(TranslationAdmin):
     list_display = (
         "user",
         "region",

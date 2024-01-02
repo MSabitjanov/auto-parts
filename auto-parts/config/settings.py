@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 DJANGO_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,7 +54,6 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth.registration",
     "drf_yasg",
     "corsheaders",
-    "modeltranslation",
 ]
 
 LOCAL_APPS = [
@@ -152,6 +152,11 @@ LANGUAGES = [
     ("ru", "Russian"),
     ("uz", "Uzbek"),
 ]
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+MODELTRANSLATION_TRANSLATION_FILES = (
+    'apps.users.translation',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
