@@ -160,3 +160,10 @@ cython_debug/
 #.idea/
 .vscode/settings.json
 media/
+geos-3.9.5.tar.bz2
+geos-3.9.5/
+proj-9.3.1.tar.gz
+proj-data-1.16.tar.gz
+proj-9.3.1/
+gdal-3.8.2.tar.gz
+gdal-3.8.2/
