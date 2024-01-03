@@ -1,5 +1,6 @@
 import os
 from django.db import models
+from django.contrib.gis.db import models as geomodels
 from django.utils.timezone import now
 
 # from django.contrib.gis.db import models as geomodels
@@ -86,7 +87,7 @@ class Region(MPTTModel):
         return f"Регион {self.name}"
 
 
-class Master(models.Model):
+class Master(geomodels.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -135,7 +136,7 @@ class Master(models.Model):
     company_name = models.CharField(
         max_length=100, null=True, blank=True, verbose_name="Название Компании"
     )
-    # location = models.PointField(blank=True, null=True, verbose_name="Местоположение")
+    location = geomodels.PointField(blank=True, null=True, verbose_name="Местоположение")
 
     class Meta:
         verbose_name = "Мастер"
@@ -178,7 +179,7 @@ class Seller(models.Model):
     seller_images = models.ManyToManyField(
         "images.SellerImage", blank=True, related_name="sellers"
     )
-    # location = models.PointField(blank=True, null=True, verbose_name="Местоположение")
+    location = geomodels.PointField(blank=True, null=True, verbose_name="Местоположение")
 
     class Meta:
         verbose_name = "Продавец"
