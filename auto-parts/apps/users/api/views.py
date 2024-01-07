@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
 from django.db.models import Avg
-from django.db.models.functions import Coalesce
+from django.contrib.gis.geos import fromstr
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.core.api.api_permissions import IsOwnerOrReadOnly
@@ -82,7 +82,28 @@ class MasterViewSet(CustomMasterModelViewSet):
         user = self.request.user
         if Master.objects.filter(user=user).exists():
             raise ValidationError("You already have a master profile")
-        serializer.save(user=self.request.user)
+        latitude = self.request.data.get('latitude', None)
+        longitude = self.request.data.get('longitude', None)
+
+        # Check if both latitude and longitude are provided
+        if latitude is not None and longitude is not None:
+            # Create a Point object from the latitude and longitude
+            location = fromstr(f'POINT({longitude} {latitude})', srid=4326)
+            serializer.save(user=user, location=location)
+        else:
+            serializer.save(user=user)
+    
+    def perform_update(self, serializer):
+        latitude = self.request.data.get('latitude', None)
+        longitude = self.request.data.get('longitude', None)
+
+        # Check if both latitude and longitude are provided
+        if latitude is not None and longitude is not None:
+            # Create a Point object from the latitude and longitude
+            location = fromstr(f'POINT({longitude} {latitude})', srid=4326)
+            serializer.save(location=location)
+        else:
+            serializer.save()
 
 
 class MasterListAPIView(ListAPIView):
@@ -113,7 +134,28 @@ class SellerViewSet(ModelViewSet):
         user = self.request.user
         if Seller.objects.filter(user=user).exists():
             raise ValidationError("You already have a seller profile")
-        serializer.save(user=self.request.user)
+        latitude = self.request.data.get('latitude', None)
+        longitude = self.request.data.get('longitude', None)
+
+        # Check if both latitude and longitude are provided
+        if latitude is not None and longitude is not None:
+            # Create a Point object from the latitude and longitude
+            location = fromstr(f'POINT({longitude} {latitude})', srid=4326)
+            serializer.save(user=user, location=location)
+        else:
+            serializer.save(user=user)
+    
+    def perform_update(self, serializer):
+        latitude = self.request.data.get('latitude', None)
+        longitude = self.request.data.get('longitude', None)
+
+        # Check if both latitude and longitude are provided
+        if latitude is not None and longitude is not None:
+            # Create a Point object from the latitude and longitude
+            location = fromstr(f'POINT({longitude} {latitude})', srid=4326)
+            serializer.save(location=location)
+        else:
+            serializer.save()
 
 
 class CustomObtainAuthToken(ObtainAuthToken):

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.gis.admin import OSMGeoAdmin
 from mptt.admin import MPTTModelAdmin
 
 from modeltranslation.admin import TranslationAdmin
@@ -52,7 +53,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(Master)
-class MasterAdmin(TranslationAdmin):
+class MasterAdmin(TranslationAdmin, OSMGeoAdmin):
     list_display = (
         "user",
         "region",
@@ -84,6 +85,7 @@ class MasterAdmin(TranslationAdmin):
                     "rating",
                     "skilled_at",
                     "description",
+                    "location",
                 ]
             },
         ),
@@ -91,7 +93,7 @@ class MasterAdmin(TranslationAdmin):
 
 
 @admin.register(Seller)
-class SellerAdmin(TranslationAdmin):
+class SellerAdmin(TranslationAdmin, OSMGeoAdmin):
     list_display = (
         "user",
         "region",
@@ -129,7 +131,7 @@ class SellerAdmin(TranslationAdmin):
                     "rating",
                     "date_of_join",
                     "seller_images",
-                    # "location",
+                    "location",
                 ]
             },
         ),
