@@ -42,7 +42,7 @@ class BrandSerializer(serializers.ModelSerializer):
 
 
 class AutoPartSerializer(serializers.ModelSerializer):
-    brand = BrandSerializer(required=False)
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all()) 
     category = serializers.PrimaryKeyRelatedField(
         queryset=AutoPartsCategory.objects.all(), required=False
     )
@@ -72,22 +72,8 @@ class AutoPartSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["category"] = AutoPartsCategorySerializer(instance.category).data
+        representation["brand"] = BrandSerializer(instance.brand).data
         return representation
-
-    def create(self, validated_data):
-        brand_name = (
-            validated_data.pop("brand").get("name")
-            if "brand" in validated_data
-            else None
-        )
-
-        if brand_name:
-            noramlized_brand_name = normalize_brand_name(brand_name)
-            brand, created = Brand.objects.get_or_create(name=noramlized_brand_name)
-            validated_data["brand"] = brand
-
-        auto_part = AutoParts.objects.create(**validated_data)
-        return auto_part
 
     def get_image_url(self, obj):
         if obj.images.exists():
