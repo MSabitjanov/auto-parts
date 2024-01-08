@@ -14,6 +14,7 @@ class UserAdmin(admin.ModelAdmin):
         "id",
         "first_name",
         "last_name",
+        "phone_number",
     )
     search_fields = ("email",)
     search_help_text = "Поиск по email"
@@ -28,6 +29,7 @@ class UserAdmin(admin.ModelAdmin):
                     "first_name",
                     "last_name",
                     "email",
+                    "phone_number",
                     "profile_image",
                     "wishlist_master",
                     "wishlist_parts",
