@@ -24,6 +24,8 @@ class AutoPartsCategory(MPTTModel):
     characteristics = TaggableManager(
         help_text="Введите характеристики через запятую(Например, если это шина, то радиус, ширина, высота. Если это двигатель, то объем, мощность, тип. )",
         verbose_name="Характеристики",
+        null=True,
+        blank=True,
     )
 
     class Meta:
