@@ -46,6 +46,7 @@ THIRD_PARTY_APPS = [
     "mptt",
     "taggit",
     "rest_framework",
+    'rest_framework_gis',
     "rest_framework.authtoken",
     "allauth",
     "allauth.account",
