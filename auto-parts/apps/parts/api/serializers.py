@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.images.api.serializers import AutoPartsImagesSerializer
 from apps.parts.utils import normalize_brand_name
-
+from apps.users.api.serializers import SellerSerializer
 
 class RecursivePartCategorySerializer(serializers.Serializer):
     def to_representation(self, value):
@@ -48,7 +48,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
     )
     company_name = serializers.CharField(source="seller.company_name", read_only=True)
     image_url = serializers.SerializerMethodField()
-
+    seller = SellerSerializer(read_only=True)
     class Meta:
         model = AutoParts
         read_only_fields = ["seller", "rating", "is_active"]
