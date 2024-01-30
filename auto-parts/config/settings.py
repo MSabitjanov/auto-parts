@@ -201,11 +201,11 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 SITE_ID = 1
 
 
-EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://localhost:3000/email/confirm/"
+EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://navto.uz/email/confirm/"
 
 
 PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = (
-    "http://localhost:3000/password-reset/confirm/"
+    "http://navto.uz/password-reset/confirm/"
 )
 
 
