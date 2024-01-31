@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.images.api.serializers import AutoPartsImagesSerializer
 from apps.parts.utils import normalize_brand_name
-
+from apps.users.api.serializers import SellerSerializer
 
 class RecursivePartCategorySerializer(serializers.Serializer):
     def to_representation(self, value):
@@ -42,13 +42,13 @@ class BrandSerializer(serializers.ModelSerializer):
 
 
 class AutoPartSerializer(serializers.ModelSerializer):
-    brand = BrandSerializer(required=False)
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all()) 
     category = serializers.PrimaryKeyRelatedField(
         queryset=AutoPartsCategory.objects.all(), required=False
     )
     company_name = serializers.CharField(source="seller.company_name", read_only=True)
     image_url = serializers.SerializerMethodField()
-
+    seller = SellerSerializer(read_only=True)
     class Meta:
         model = AutoParts
         read_only_fields = ["seller", "rating", "is_active"]
@@ -72,22 +72,8 @@ class AutoPartSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["category"] = AutoPartsCategorySerializer(instance.category).data
+        representation["brand"] = BrandSerializer(instance.brand).data
         return representation
-
-    def create(self, validated_data):
-        brand_name = (
-            validated_data.pop("brand").get("name")
-            if "brand" in validated_data
-            else None
-        )
-
-        if brand_name:
-            noramlized_brand_name = normalize_brand_name(brand_name)
-            brand, created = Brand.objects.get_or_create(name=noramlized_brand_name)
-            validated_data["brand"] = brand
-
-        auto_part = AutoParts.objects.create(**validated_data)
-        return auto_part
 
     def get_image_url(self, obj):
         if obj.images.exists():

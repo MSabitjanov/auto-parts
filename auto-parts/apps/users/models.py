@@ -18,6 +18,7 @@ def get_upload_path(instance, filename):
 class User(AbstractUser):
     username = None
     email = models.EmailField("Email адресс", unique=True)
+    phone_number = models.CharField("Номер телефона", max_length=20, blank=True, null=True)
     profile_image = models.ImageField(upload_to=get_upload_path, blank=True)
     wishlist_master = models.ManyToManyField(
         "users.Master", blank=True, related_name="wishlist_master"

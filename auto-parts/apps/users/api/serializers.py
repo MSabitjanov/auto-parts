@@ -30,7 +30,7 @@ class UserSerializer(ModelSerializer):
 class UserSerializerForChat(ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "email", "first_name", "last_name")
+        fields = ("id", "email", "first_name", "last_name", "profile_image")
 
 
 class RecursiveMasterSkillSerializer(serializers.Serializer):
@@ -116,7 +116,7 @@ class MasterReadSerializer(ModelSerializer):
     """
     Serializer for master profile. Serves all methods except list.
     """
-
+    user = UserSerializer()
     skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
@@ -175,7 +175,7 @@ class MasterListSerializer(ModelSerializer):
 
 class SellerSerializer(ModelSerializer):
     seller_images = SellerImagesSerializer(many=True, read_only=True)
-
+    user = UserSerializer()
     class Meta:
         model = Seller
         fields = "__all__"
