@@ -26,7 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ["localhost", "95.130.227.232"]
+ALLOWED_HOSTS = ["localhost", "95.130.227.232", "navto.uz", "www.navto.uz"]
 
 
 # Application definition
@@ -220,6 +220,10 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 megabytes
+
 # GDAL
 # import os
 # GDAL_LIBRARY_PATH = os.path.join("C:\\Program Files\\GDAL", "gdal.dll")
+
+
