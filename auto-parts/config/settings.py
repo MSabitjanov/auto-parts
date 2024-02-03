@@ -166,7 +166,7 @@ MODELTRANSLATION_TRANSLATION_FILES = (
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    str(BASE_DIR / "static"),
+    # str(BASE_DIR / "static"),
 ]
 
 STATIC_ROOT = config('STATIC_ROOT', default=str(BASE_DIR / "staticfiles"))
