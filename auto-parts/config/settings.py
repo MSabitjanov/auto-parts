@@ -26,7 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ["127.0.0.1", "95.130.227.232"]
+ALLOWED_HOSTS = ["localhost", "95.130.227.232", "navto.uz", "www.navto.uz"]
 
 
 # Application definition
@@ -201,11 +201,11 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 SITE_ID = 1
 
 
-EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://localhost:3000/email/confirm/"
+EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://navto.uz/email/confirm/"
 
 
 PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = (
-    "http://localhost:3000/password-reset/confirm/"
+    "http://navto.uz/password-reset/confirm/"
 )
 
 
@@ -221,6 +221,10 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool)
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 megabytes
+
 # GDAL
 # import os
 # GDAL_LIBRARY_PATH = os.path.join("C:\\Program Files\\GDAL", "gdal.dll")
+
+
