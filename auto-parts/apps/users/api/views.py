@@ -19,6 +19,7 @@ from .serializers import (
     MasterSerializer,
     MasterReadSerializer,
     SellerSerializer,
+    SellerCreateUpdateSerializer,
     UserSerializer,
     MasterSkillSerializer,
     RegionSerializer,
@@ -128,7 +129,13 @@ class MasterBySkillListAPIView(ListAPIView):
 class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
+    seller_create_serializer = SellerCreateUpdateSerializer 
     permission_classes = [IsOwnerOrReadOnly]
+    
+    def get_serializer_class(self):
+        if self.action in ['create', 'update', 'partial_update']:
+            return SellerCreateUpdateSerializer  # Use the create/update serializer for those actions
+        return super().get_serializer_class()
 
     def perform_create(self, serializer):
         user = self.request.user

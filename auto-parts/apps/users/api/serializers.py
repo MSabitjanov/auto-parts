@@ -182,6 +182,18 @@ class SellerSerializer(ModelSerializer):
         read_only_fields = ("user", "date_of_join", "rating")
 
 
+class SellerCreateUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Seller
+        fields = "__all__"
+        read_only_fields = ("user", "date_of_join", "rating")
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user'] = UserSerializer(instance.user).data
+        return representation
+
+
 class EmailAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
