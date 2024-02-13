@@ -228,3 +228,16 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 megabytes
 # GDAL_LIBRARY_PATH = os.path.join("C:\\Program Files\\GDAL", "gdal.dll")
 
 
+# Sentry settings
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://3f33b44677a360c8e6f80c4fa8dd047e@o4506534759235584.ingest.sentry.io/4506534768869376",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
