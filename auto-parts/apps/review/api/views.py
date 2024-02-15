@@ -5,12 +5,12 @@ from rest_framework import status
 
 from apps.review.models import MasterReview, AutoPartsReview
 from apps.core.api.api_permissions import IsOwnerOrReadOnly
-
+from rest_framework.permissions import IsAuthenticated
 from .serializers import MasterReviewSerializer, AutoPartsReviewSerializer
 
 
 class BaseReviewViewSet(ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def validate_review_data(self, serializer):
         rating = serializer.validated_data.get("rating", 0)
