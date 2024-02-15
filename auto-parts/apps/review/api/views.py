@@ -27,7 +27,19 @@ class BaseReviewViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         self.validate_review_data(serializer)
-        serializer.save(user=self.request.user)
+
+        review = (
+            self.get_queryset()
+            .filter(
+                user=self.request.user,
+                reviewed_object=serializer.validated_data["reviewed_object"],
+            )
+            .first()
+        )
+        if review:
+            serializer.update(review, serializer.validated_data)
+        else:
+            serializer.save(user=self.request.user)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
