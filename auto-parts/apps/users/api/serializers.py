@@ -86,11 +86,12 @@ class MasterSerializer(ModelSerializer):
     Serializer for master profile. Serves all methods except list.
     """
 
-    skilled_at = serializers.PrimaryKeyRelatedField(
-        queryset=MasterSkill.objects.all(),
-        many=True,
-        required=False,
-    )
+    # skilled_at = serializers.PrimaryKeyRelatedField(
+    #     queryset=MasterSkill.objects.all(),
+    #     many=True,
+    #     required=False,
+    # )
+    skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
 
