@@ -5,6 +5,7 @@ from rest_framework import status
 
 from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.core.api.api_permissions import IsOwnerOrReadOnly, IsSellerOrReadOnly
+from apps.images.models import AutoPartsImages
 
 from .serializers import (
     AutoPartListCategorySerializer,
@@ -59,8 +60,12 @@ class AutoPartViewSet(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_create(self, serializer):
-        serializer.save(seller=self.request.user.seller, is_active=True)
-
+        auto_part_instance = serializer.save(seller=self.request.user.seller, is_active=True)
+        auto_part_id = auto_part_instance.id
+        images = self.request.data.getlist("images")
+        if images:
+            for image in images:
+                AutoPartsImages.objects.create(auto_part_id=auto_part_id, image=image)
 
 class SellerAutoParts(ListAPIView):
     serializer_class = AutoPartSerializer
