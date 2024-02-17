@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.images.api.serializers import SellerImagesSerializer, MasterImagesSerializer
-
+from apps.review.api.serializers import MasterReviewSerializer
 
 class UserSerializer(ModelSerializer):
     is_seller = serializers.SerializerMethodField()
@@ -121,6 +121,7 @@ class MasterReadSerializer(ModelSerializer):
     skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
+    reviews = MasterReviewSerializer(many=True, read_only=True, source="master_reviews")
 
     class Meta:
         model = Master
