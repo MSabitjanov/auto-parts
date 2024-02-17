@@ -7,10 +7,14 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import mixins
+from rest_framework.views import APIView
+
 
 from django.db.models import Avg
 from django.contrib.gis.geos import fromstr
+from django.shortcuts import get_object_or_404
 
+from apps.parts.models import AutoParts
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.core.api.api_permissions import IsOwnerOrReadOnly
 
@@ -180,3 +184,33 @@ class CustomObtainAuthToken(ObtainAuthToken):
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
         return Response({"token": token.key})
+
+
+class FavouritesAutoPartCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, pk, *args, **kwargs):
+        user = request.user
+        auto_part = get_object_or_404(AutoParts, pk=pk)
+        if user.wishlist_parts.filter(pk=pk).exists():
+            user.wishlist_parts.remove(auto_part)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            user.wishlist_parts.add(auto_part)
+            
+        return Response(status=status.HTTP_201_CREATED)
+    
+
+class FavouritesMasterCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, pk, *args, **kwargs):
+        user = request.user
+        master = get_object_or_404(Master, pk=pk)
+        if user.wishlist_master.filter(pk=pk).exists():
+            user.wishlist_master.remove(master)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            user.wishlist_master.add(master)
+            
+        return Response(status=status.HTTP_201_CREATED)
