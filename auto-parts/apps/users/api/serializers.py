@@ -157,6 +157,7 @@ class MasterListSerializer(ModelSerializer):
     skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Master
@@ -165,6 +166,7 @@ class MasterListSerializer(ModelSerializer):
             "user",
             "is_recommeded",
             "rating",
+            "reviews_count",
             "last_visited",
             "date_of_join",
             "image_url",
@@ -175,7 +177,10 @@ class MasterListSerializer(ModelSerializer):
             return obj.images.first().image.url
         return None
 
+    def get_reviews_count(self, obj):
+        return obj.master_reviews.count()
 
+    
 class SellerSerializer(ModelSerializer):
     seller_images = SellerImagesSerializer(many=True, read_only=True)
     user = UserSerializer()
