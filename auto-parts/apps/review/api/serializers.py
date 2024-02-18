@@ -29,6 +29,10 @@ class MasterReviewSerializer(ModelSerializer):
 
 
 class AutoPartsReviewSerializer(ModelSerializer):
+    from apps.users.api.serializers import UserSerializerForChat
+    
+    user = UserSerializerForChat(read_only=True)
+    
     class Meta:
         model = AutoPartsReview
         fields = (

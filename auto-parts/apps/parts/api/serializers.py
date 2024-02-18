@@ -4,6 +4,7 @@ from apps.parts.models import AutoPartsCategory, Brand, AutoParts
 from apps.images.api.serializers import AutoPartsImagesSerializer
 from apps.parts.utils import normalize_brand_name
 from apps.users.api.serializers import SellerSerializer
+from apps.review.api.serializers import AutoPartsReviewSerializer
 
 class RecursivePartCategorySerializer(serializers.Serializer):
     def to_representation(self, value):
@@ -49,6 +50,8 @@ class AutoPartSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source="seller.company_name", read_only=True)
     image_url = serializers.SerializerMethodField()
     seller = SellerSerializer(read_only=True)
+    reviews = AutoPartsReviewSerializer(many=True, read_only=True, source="auto_parts_reviews")
+        
     class Meta:
         model = AutoParts
         read_only_fields = ["seller", "rating", "is_active"]
@@ -57,6 +60,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
             "category",
             "brand",
             "seller",
+            "reviews",
             "company_name",
             "name",
             "description",

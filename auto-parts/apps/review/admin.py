@@ -36,4 +36,4 @@ class AutoPartsReviewAdmin(admin.ModelAdmin):
     search_help_text = "Поиск по email, комментарию"
     list_filter = ("active",)
     date_hierarchy = "created_at"
-    readonly_fields = ("user", "rating", "created_at")
+    readonly_fields = ("rating", "created_at")
