@@ -51,6 +51,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     seller = SellerSerializer(read_only=True)
     reviews = AutoPartsReviewSerializer(many=True, read_only=True, source="auto_parts_reviews")
+    review_count = serializers.SerializerMethodField()
         
     class Meta:
         model = AutoParts
@@ -61,6 +62,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
             "brand",
             "seller",
             "reviews",
+            "review_count",
             "company_name",
             "name",
             "description",
@@ -87,3 +89,6 @@ class AutoPartSerializer(serializers.ModelSerializer):
                 image_urls.append(image_data)
             return image_urls
         return None
+
+    def get_review_count(self, obj):
+        return obj.auto_parts_reviews.count()
