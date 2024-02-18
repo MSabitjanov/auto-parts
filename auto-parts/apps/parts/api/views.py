@@ -12,6 +12,7 @@ from .serializers import (
     AutoPartsCategorySerializer,
     BrandSerializer,
     AutoPartSerializer,
+    AutoPartDetailSerializer,
 )
 
 
@@ -49,11 +50,18 @@ class BrandListAPIView(ListAPIView):
 class AutoPartViewSet(ModelViewSet):
     queryset = AutoParts.objects.all()
     serializer_class = AutoPartSerializer
+    detail_serializer_class = AutoPartDetailSerializer
     permission_classes = [IsSellerOrReadOnly]
 
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
 
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return self.detail_serializer_class
+        else:
+            return super().get_serializer_class()
+    
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.perform_soft_delete()

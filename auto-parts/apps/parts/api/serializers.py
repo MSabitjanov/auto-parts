@@ -50,7 +50,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source="seller.company_name", read_only=True)
     image_url = serializers.SerializerMethodField()
     seller = SellerSerializer(read_only=True)
-    reviews = AutoPartsReviewSerializer(many=True, read_only=True, source="auto_parts_reviews")
+    # reviews = AutoPartsReviewSerializer(many=True, read_only=True, source="auto_parts_reviews")
     review_count = serializers.SerializerMethodField()
         
     class Meta:
@@ -61,7 +61,7 @@ class AutoPartSerializer(serializers.ModelSerializer):
             "category",
             "brand",
             "seller",
-            "reviews",
+            # "reviews",
             "review_count",
             "company_name",
             "name",
@@ -92,3 +92,11 @@ class AutoPartSerializer(serializers.ModelSerializer):
 
     def get_review_count(self, obj):
         return obj.auto_parts_reviews.count()
+    
+    
+class AutoPartDetailSerializer(AutoPartSerializer):
+    reviews = AutoPartsReviewSerializer(many=True, read_only=True, source="auto_parts_reviews")
+    
+    class Meta:
+        model = AutoParts
+        fields = AutoPartSerializer.Meta.fields + ("reviews",)
