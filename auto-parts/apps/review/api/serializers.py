@@ -2,8 +2,11 @@ from rest_framework.serializers import ModelSerializer, ValidationError
 
 from apps.review.models import MasterReview, AutoPartsReview
 
-
 class MasterReviewSerializer(ModelSerializer):
+    from apps.users.api.serializers import UserSerializerForChat
+    
+    user = UserSerializerForChat(read_only=True)
+
     class Meta:
         model = MasterReview
         fields = (
