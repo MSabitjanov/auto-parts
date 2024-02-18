@@ -123,6 +123,7 @@ class MasterReadSerializer(ModelSerializer):
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
     reviews = MasterReviewSerializer(many=True, read_only=True, source="master_reviews")
+    region = RegionSerializer()
 
     class Meta:
         model = Master
@@ -158,6 +159,7 @@ class MasterListSerializer(ModelSerializer):
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
     reviews_count = serializers.SerializerMethodField()
+    region = RegionSerializer()
 
     class Meta:
         model = Master
