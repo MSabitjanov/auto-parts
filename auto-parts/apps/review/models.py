@@ -69,6 +69,7 @@ class AutoPartsReview(Review):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         review_statistics, created = ReviewStatistics.objects.get_or_create(auto_parts_review=self.reviewed_object)
+        print(review_statistics)
         review_statistics.update_review_statistics(self)
 
 
@@ -80,17 +81,19 @@ class ReviewStatistics(models.Model):
     
     @property
     def average_rating(self):
-        return self.total_review_score / self.total_review_numbers if self.total_review_numbers else 0
+        return round(self.total_review_score / self.total_review_numbers, 1) if self.total_review_numbers else 0
     
     def update_review_statistics(self, review):
-        self.total_review_numbers = F("total_review_numbers") + 1
-        self.total_review_score = F("total_review_score") + review.rating
+        self.total_review_numbers += 1
+        self.total_review_score += review.rating
         if isinstance(review, MasterReview):
             self.master_review = review.reviewed_object
             self.master_review.rating = self.average_rating
         elif isinstance(review, AutoPartsReview):
             self.auto_parts_review = review.reviewed_object
             self.auto_parts_review.rating = self.average_rating
+            self.auto_parts_review.save()
+            print(self.auto_parts_review.rating)
         else:
             raise ValueError("Invalid review type")
         self.save()
