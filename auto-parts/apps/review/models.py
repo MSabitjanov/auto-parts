@@ -48,7 +48,7 @@ class MasterReview(Review):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         review_statistics, created = ReviewStatistics.objects.get_or_create(master_review=self.reviewed_object)
-        review_statistics.update_review_statistics(self)
+        review_statistics.update_review_statistics(self, created)
 
 
 class AutoPartsReview(Review):
@@ -67,10 +67,12 @@ class AutoPartsReview(Review):
         return f"{self.user} - {self.reviewed_object}"
     
     def save(self, *args, **kwargs):
+        original_rating = 0
+        if self.pk:
+            original_rating = AutoPartsReview.objects.get(pk=self.pk).rating
         super().save(*args, **kwargs)
         review_statistics, created = ReviewStatistics.objects.get_or_create(auto_parts_review=self.reviewed_object)
-        print(review_statistics)
-        review_statistics.update_review_statistics(self)
+        review_statistics.update_review_statistics(self, created, original_rating)
 
 
 class ReviewStatistics(models.Model):
@@ -81,19 +83,27 @@ class ReviewStatistics(models.Model):
     
     @property
     def average_rating(self):
-        return round(self.total_review_score / self.total_review_numbers, 1) if self.total_review_numbers else 0
+        if self.total_review_numbers:
+            return round(self.total_review_score / self.total_review_numbers, 1)
+        else:
+            return 0
     
-    def update_review_statistics(self, review):
-        self.total_review_numbers += 1
-        self.total_review_score += review.rating
+    def update_review_statistics(self, review, created, original_rating):
+        if created:
+            self.total_review_numbers += 1
+            self.total_review_score += review.rating
+        else:
+            self.total_review_score = self.total_review_score - original_rating + review.rating
+
         if isinstance(review, MasterReview):
             self.master_review = review.reviewed_object
             self.master_review.rating = self.average_rating
+            self.master_review.save()
         elif isinstance(review, AutoPartsReview):
             self.auto_parts_review = review.reviewed_object
             self.auto_parts_review.rating = self.average_rating
             self.auto_parts_review.save()
-            print(self.auto_parts_review.rating)
         else:
             raise ValueError("Invalid review type")
+
         self.save()
