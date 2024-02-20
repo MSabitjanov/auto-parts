@@ -1,6 +1,5 @@
-2. Установить PostGis
-3. Optimize upload images with pillow
-
-Подключить api get masters by skill
-add name to master api
-add image url to master serializer
+for obj in data:
+...     category = obj['category']
+...     parent_category = AutoPartsCategory.objects.get(name_ru=category)
+...     for part in obj['parts']:
+...             AutoPartsCategory.objects.create(name_ru=part, parent=parent_category)
