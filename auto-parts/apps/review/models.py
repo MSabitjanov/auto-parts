@@ -46,9 +46,12 @@ class MasterReview(Review):
         return f"{self.user} - {self.reviewed_object}"
     
     def save(self, *args, **kwargs):
+        original_rating = 0
+        if self.pk:
+            original_rating = MasterReview.objects.get(pk=self.pk).rating
         super().save(*args, **kwargs)
         review_statistics, created = ReviewStatistics.objects.get_or_create(master_review=self.reviewed_object)
-        review_statistics.update_review_statistics(self, created)
+        review_statistics.update_review_statistics(self, created, original_rating)
 
 
 class AutoPartsReview(Review):
