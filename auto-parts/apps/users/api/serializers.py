@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.images.api.serializers import SellerImagesSerializer, MasterImagesSerializer
+from apps.parts.models import AutoParts
 
 
 class MasterSerializerForWishlist(ModelSerializer):
@@ -13,11 +14,20 @@ class MasterSerializerForWishlist(ModelSerializer):
         model = Master
         fields = "__all__"
 
+
+class AutoPartSerializerForWishlist(ModelSerializer):
+    class Meta:
+        model = AutoParts
+        fields = "__all__"
+        
+
 class UserSerializer(ModelSerializer):
     
     is_seller = serializers.SerializerMethodField()
     is_master = serializers.SerializerMethodField()
     wishlist_master = MasterSerializerForWishlist(many=True, read_only=True)
+    wishlist_parts = AutoPartSerializerForWishlist(many=True, read_only=True)
+    
 
     class Meta:
         model = User
