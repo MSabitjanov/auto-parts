@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from .views import AutoPartsCategoryListAPIView, BrandListAPIView, AutoPartViewSet, AutoPartByCategory, SellerAutoParts, AutoPartCategoriesListAPIView, SearchAutoPart, SerchAutoPartByBrand
+from .views import AutoPartsCategoryListAPIView, BrandListAPIView, AutoPartViewSet, AutoPartByCategory, SellerAutoParts, AutoPartCategoriesListAPIView, SearchAutoPart, SerchAutoPartByBrand, SearchAutoPartByCategoryAndBrand
 from .routers import router
 
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path("sellers/<int:seller_id>/auto-parts/", SellerAutoParts.as_view(), name="seller-auto-parts"),
     path("search/autopart/", SearchAutoPart.as_view(), name="search-auto-part"),
     path("search/autopart/brand/", SerchAutoPartByBrand.as_view(), name="search-auto-part-by-brand"),
+    path("autopart/search/", SearchAutoPartByCategoryAndBrand.as_view(), name="search-auto-part-by-category-and-brand"),   
 ]

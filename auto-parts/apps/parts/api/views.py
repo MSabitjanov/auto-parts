@@ -108,3 +108,27 @@ class SerchAutoPartByBrand(ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+
+class SearchAutoPartByCategoryAndBrand(ListAPIView):
+    serializer_class = AutoPartSerializer
+
+    def get_queryset(self):
+        brand = self.request.query_params.get('brand', [])
+        category = self.request.query_params.get('category', '')
+
+        queryset = AutoParts.objects.all()
+        
+        if category and category.isdigit():
+            queryset = queryset.filter(category__id=int(category))
+        
+        if brand:
+            brand = [int(brand_id) for brand_id in brand.split(",") if brand_id.isdigit()]
+            queryset = queryset.filter(brand__id__in=brand)
+        
+        return queryset
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
