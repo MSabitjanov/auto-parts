@@ -94,3 +94,17 @@ class SearchAutoPart(ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+
+class SerchAutoPartByBrand(ListAPIView):
+    serializer_class = AutoPartSerializer
+
+    def get_queryset(self):
+        brand = self.request.query_params.get("brand")
+        brand = [int(brand_id) for brand_id in brand.split(",") if brand_id.isdigit()]
+        return AutoParts.objects.filter(brand__id__in = brand)
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

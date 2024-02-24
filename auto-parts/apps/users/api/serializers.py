@@ -194,6 +194,8 @@ class MasterListSerializer(ModelSerializer):
 class SellerSerializer(ModelSerializer):
     seller_images = SellerImagesSerializer(many=True, read_only=True)
     user = UserSerializer()
+    region = RegionSerializer()
+
     class Meta:
         model = Seller
         fields = "__all__"
