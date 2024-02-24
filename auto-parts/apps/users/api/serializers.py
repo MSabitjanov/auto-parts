@@ -92,13 +92,11 @@ class MasterSerializer(ModelSerializer):
     """
     Serializer for master profile. Serves all methods except list.
     """
-
-    # skilled_at = serializers.PrimaryKeyRelatedField(
-    #     queryset=MasterSkill.objects.all(),
-    #     many=True,
-    #     required=False,
-    # )
-    skilled_at = MasterSkillSerializerAll(many=True, read_only=True)
+    skilled_at = serializers.PrimaryKeyRelatedField(
+        queryset=MasterSkill.objects.all(),
+        many=True,
+        required=False,
+    )
     master_name = serializers.CharField(source="user.get_full_name", read_only=True)
     image_url = serializers.SerializerMethodField()
 
@@ -118,8 +116,13 @@ class MasterSerializer(ModelSerializer):
         if obj.images.exists():
             return [image.image.url for image in obj.images.all()]
         return None
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['skilled_at'] = MasterSkillSerializerAll(instance.skilled_at.all(), many=True).data
+        return representation
 
-
+    
 class MasterReadSerializer(ModelSerializer):
     """
     Serializer for master profile. Serves all methods except list.
