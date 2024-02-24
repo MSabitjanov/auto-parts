@@ -31,10 +31,11 @@ from .serializers import (
     MasterSkillSerializerAll,
 )
 
+from .user_serializers import UserSerializerForProfile
 
 class UserViewSet(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializerForProfile
     permission_classes = [IsAuthenticated]
 
     def get_object(self):

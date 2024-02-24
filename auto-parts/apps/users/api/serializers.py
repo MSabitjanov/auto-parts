@@ -25,8 +25,8 @@ class UserSerializer(ModelSerializer):
     
     is_seller = serializers.SerializerMethodField()
     is_master = serializers.SerializerMethodField()
-    wishlist_master = MasterSerializerForWishlist(many=True, read_only=True)
-    wishlist_parts = AutoPartSerializerForWishlist(many=True, read_only=True)
+    # wishlist_master = MasterSerializerForWishlist(many=True, read_only=True)
+    # wishlist_parts = AutoPartSerializerForWishlist(many=True, read_only=True)
     
 
     class Meta:
