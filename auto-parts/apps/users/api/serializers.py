@@ -7,9 +7,17 @@ from django.shortcuts import get_object_or_404
 from apps.users.models import User, MasterSkill, Region, Master, Seller
 from apps.images.api.serializers import SellerImagesSerializer, MasterImagesSerializer
 
+
+class MasterSerializerForWishlist(ModelSerializer):
+    class Meta:
+        model = Master
+        fields = "__all__"
+
 class UserSerializer(ModelSerializer):
+    
     is_seller = serializers.SerializerMethodField()
     is_master = serializers.SerializerMethodField()
+    wishlist_master = MasterSerializerForWishlist(many=True, read_only=True)
 
     class Meta:
         model = User

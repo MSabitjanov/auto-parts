@@ -83,6 +83,7 @@ class MasterAdmin(TranslationAdmin, OSMGeoAdmin):
                     "date_of_birth",
                     "phone_number",
                     "website",
+                    "working_hours",
                     "is_recommended",
                     "rating",
                     "skilled_at",

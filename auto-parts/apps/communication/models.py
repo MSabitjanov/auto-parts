@@ -57,7 +57,7 @@ class Messages(models.Model):
         Chat, on_delete=models.CASCADE, verbose_name="Чат", related_name="messages"
     )
     is_read = models.BooleanField(verbose_name="Прочитано", default=False)
-    content = models.TextField(verbose_name="Cообщение")
+    content = models.TextField(verbose_name="Cообщение", null=True, blank=True)
     attachment = models.FileField(
         upload_to=get_upload_path, blank=True, verbose_name="Вложение"
     )

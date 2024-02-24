@@ -98,7 +98,7 @@ class Master(geomodels.Model):
     date_of_birth = models.DateField(
         blank=True, null=True, verbose_name="Дата рождения"
     )
-    start_of_carrier = models.DateField(
+    start_of_carrier = models.PositiveIntegerField(
         blank=True,
         null=True,
         verbose_name="Начало карьеры",
@@ -109,6 +109,9 @@ class Master(geomodels.Model):
         verbose_name="Специализация мастера",
         related_name="masters",
         blank=True,
+    )
+    working_hours = models.JSONField(
+        default=default_working_hours, verbose_name="Рабочие часы"
     )
     last_visited = models.DateTimeField(
         auto_now=True, verbose_name="Последнее посещение"
