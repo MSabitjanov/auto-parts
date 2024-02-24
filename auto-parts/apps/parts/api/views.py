@@ -81,3 +81,16 @@ class SellerAutoParts(ListAPIView):
     def get_queryset(self):
         seller_id = self.kwargs.get("seller_id")
         return AutoParts.objects.filter(seller_id=seller_id)
+    
+    
+class SearchAutoPart(ListAPIView):
+    serializer_class = AutoPartSerializer
+
+    def get_queryset(self):
+        query = self.request.query_params.get("query")
+        return AutoParts.objects.filter(name__icontains=query)
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
