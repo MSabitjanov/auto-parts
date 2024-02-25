@@ -46,7 +46,7 @@ THIRD_PARTY_APPS = [
     "mptt",
     "taggit",
     "rest_framework",
-    'rest_framework_gis',
+    "rest_framework_gis",
     "rest_framework.authtoken",
     "allauth",
     "allauth.account",
@@ -154,10 +154,10 @@ LANGUAGES = [
     ("uz", "Uzbek"),
 ]
 
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
+MODELTRANSLATION_DEFAULT_LANGUAGE = "ru"
 MODELTRANSLATION_TRANSLATION_FILES = (
-    'apps.users.translation',
-    'apps.parts.translation',
+    "apps.users.translation",
+    "apps.parts.translation",
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -169,11 +169,11 @@ STATICFILES_DIRS = [
     # str(BASE_DIR / "static"),
 ]
 
-STATIC_ROOT = config('STATIC_ROOT', default=str(BASE_DIR / "staticfiles"))
+STATIC_ROOT = config("STATIC_ROOT", default=str(BASE_DIR / "staticfiles"))
 
 # Media
 MEDIA_URL = "/media/"
-MEDIA_ROOT = config('MEDIA_ROOT', default=str(BASE_DIR / "media"))
+MEDIA_ROOT = config("MEDIA_ROOT", default=str(BASE_DIR / "media"))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -204,9 +204,7 @@ SITE_ID = 1
 EMAIL_CONFIRM_REDIRECT_BASE_URL = "http://navto.uz/email/confirm/"
 
 
-PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = (
-    "http://navto.uz/password-reset/confirm/"
-)
+PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = "http://navto.uz/password-reset/confirm/"
 
 
 # Email
@@ -231,13 +229,13 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 megabytes
 # Sentry settings
 import sentry_sdk
 
-# sentry_sdk.init(
-#     dsn="https://3f33b44677a360c8e6f80c4fa8dd047e@o4506534759235584.ingest.sentry.io/4506534768869376",
-#     # Set traces_sample_rate to 1.0 to capture 100%
-#     # of transactions for performance monitoring.
-#     traces_sample_rate=1.0,
-#     # Set profiles_sample_rate to 1.0 to profile 100%
-#     # of sampled transactions.
-#     # We recommend adjusting this value in production.
-#     profiles_sample_rate=1.0,
-# )
+sentry_sdk.init(
+    dsn="https://3f33b44677a360c8e6f80c4fa8dd047e@o4506534759235584.ingest.sentry.io/4506534768869376",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)

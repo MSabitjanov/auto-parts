@@ -44,14 +44,18 @@ class MasterReview(Review):
 
     def __str__(self):
         return f"{self.user} - {self.reviewed_object}"
-    
+
     def save(self, *args, **kwargs):
         original_rating = 0
         if self.pk:
             original_rating = MasterReview.objects.get(pk=self.pk).rating
+        review_statistics, _ = ReviewStatistics.objects.get_or_create(
+            master_review=self.reviewed_object
+        )
+        review_statistics.update_review_statistics(
+            self, self._state.adding, original_rating
+        )
         super().save(*args, **kwargs)
-        review_statistics, created = ReviewStatistics.objects.get_or_create(master_review=self.reviewed_object)
-        review_statistics.update_review_statistics(self, created, original_rating)
 
 
 class AutoPartsReview(Review):
@@ -68,35 +72,56 @@ class AutoPartsReview(Review):
 
     def __str__(self):
         return f"{self.user} - {self.reviewed_object}"
-    
+
     def save(self, *args, **kwargs):
         original_rating = 0
         if self.pk:
             original_rating = AutoPartsReview.objects.get(pk=self.pk).rating
+        review_statistics, _ = ReviewStatistics.objects.get_or_create(
+            auto_parts_review=self.reviewed_object
+        )
+        review_statistics.update_review_statistics(
+            self, self._state.adding, original_rating
+        )
         super().save(*args, **kwargs)
-        review_statistics, created = ReviewStatistics.objects.get_or_create(auto_parts_review=self.reviewed_object)
-        review_statistics.update_review_statistics(self, created, original_rating)
 
 
 class ReviewStatistics(models.Model):
-    master_review = models.ForeignKey(Master, on_delete=models.CASCADE, null=True, blank=True, related_name="review_statistics")
-    auto_parts_review = models.ForeignKey(AutoParts, on_delete=models.CASCADE, null=True, blank=True, related_name="review_statistics")
+    master_review = models.ForeignKey(
+        Master,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="review_statistics",
+    )
+    auto_parts_review = models.ForeignKey(
+        AutoParts,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="review_statistics",
+    )
     total_review_numbers = models.PositiveIntegerField(default=0)
     total_review_score = models.PositiveIntegerField(default=0)
-    
+
     @property
     def average_rating(self):
         if self.total_review_numbers:
             return round(self.total_review_score / self.total_review_numbers, 1)
         else:
             return 0
-    
+
     def update_review_statistics(self, review, created, original_rating):
         if created:
+            print("created")
             self.total_review_numbers += 1
             self.total_review_score += review.rating
+            self.save()
         else:
-            self.total_review_score = self.total_review_score - original_rating + review.rating
+            self.total_review_score = (
+                self.total_review_score - original_rating + review.rating
+            )
+            self.save()
 
         if isinstance(review, MasterReview):
             self.master_review = review.reviewed_object
