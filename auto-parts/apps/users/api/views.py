@@ -201,6 +201,12 @@ class FavouritesAutoPartCreateAPIView(APIView):
             
         return Response(status=status.HTTP_201_CREATED)
     
+    def destroy(self, request, pk, *args, **kwargs):
+        user = request.user
+        auto_part = get_object_or_404(AutoParts, pk=pk)
+        user.wishlist_parts.remove(auto_part)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
 class FavouritesMasterCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -215,3 +221,9 @@ class FavouritesMasterCreateAPIView(APIView):
             user.wishlist_master.add(master)
             
         return Response(status=status.HTTP_201_CREATED)
+    
+    def destroy(self, request, pk, *args, **kwargs):
+        user = request.user
+        master = get_object_or_404(Master, pk=pk)
+        user.wishlist_master.remove(master)
+        return Response(status=status.HTTP_204_NO_CONTENT)
