@@ -70,7 +70,7 @@ class MasterAdmin(TranslationAdmin, OSMGeoAdmin):
     search_fields = ("user__email", "phone_number")
     search_help_text = "Поиск по email, номеру телефона"
     date_hierarchy = "date_of_join"
-
+    list_editable = ("is_recommended",)
     readonly_fields = ("rating",)
     fieldsets = [
         (

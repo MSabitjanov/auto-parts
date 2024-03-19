@@ -14,3 +14,4 @@ django-cors-headers==4.3.1
 django-modeltranslation==0.18.11  #https://django-modeltranslation.readthedocs.io/en/latest/
 djangorestframework-gis==1.0
 sentry-sdk-1.40.5
+apscheduler==3.10.4
