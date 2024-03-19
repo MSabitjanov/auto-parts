@@ -20,6 +20,7 @@ class AutoPartsCategoryListAPIView(ListAPIView):
     """
     Для рекурсивного вывода категорий
     """
+
     queryset = AutoPartsCategory.objects.prefetch_related("children")
     serializer_class = AutoPartsCategorySerializer
 
@@ -28,6 +29,7 @@ class AutoPartCategoriesListAPIView(ListAPIView):
     """
     Для вывода категорий без рекурсии
     """
+
     queryset = AutoPartsCategory.objects.all()
     serializer_class = AutoPartListCategorySerializer
 
@@ -54,26 +56,34 @@ class AutoPartViewSet(ModelViewSet):
     permission_classes = [IsSellerOrReadOnly]
 
     def get_queryset(self):
-        return super().get_queryset().filter(is_active=True)
+        return (
+            super()
+            .get_queryset()
+            .filter(is_active=True)
+            .order_by("-date_of_pubication")
+        )
 
     def get_serializer_class(self):
         if self.action == "retrieve":
             return self.detail_serializer_class
         else:
             return super().get_serializer_class()
-    
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.perform_soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_create(self, serializer):
-        auto_part_instance = serializer.save(seller=self.request.user.seller, is_active=True)
+        auto_part_instance = serializer.save(
+            seller=self.request.user.seller, is_active=True
+        )
         auto_part_id = auto_part_instance.id
         images = self.request.data.getlist("images")
         if images:
             for image in images:
                 AutoPartsImages.objects.create(auto_part_id=auto_part_id, image=image)
+
 
 class SellerAutoParts(ListAPIView):
     serializer_class = AutoPartSerializer
@@ -81,20 +91,20 @@ class SellerAutoParts(ListAPIView):
     def get_queryset(self):
         seller_id = self.kwargs.get("seller_id")
         return AutoParts.objects.filter(seller_id=seller_id)
-    
-    
+
+
 class SearchAutoPart(ListAPIView):
     serializer_class = AutoPartSerializer
 
     def get_queryset(self):
         query = self.request.query_params.get("query")
         return AutoParts.objects.filter(name__icontains=query)
-    
+
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
+
 
 class SerchAutoPartByBrand(ListAPIView):
     serializer_class = AutoPartSerializer
@@ -102,32 +112,34 @@ class SerchAutoPartByBrand(ListAPIView):
     def get_queryset(self):
         brand = self.request.query_params.get("brand")
         brand = [int(brand_id) for brand_id in brand.split(",") if brand_id.isdigit()]
-        return AutoParts.objects.filter(brand__id__in = brand)
-    
+        return AutoParts.objects.filter(brand__id__in=brand)
+
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
+
 
 class SearchAutoPartByCategoryAndBrand(ListAPIView):
     serializer_class = AutoPartSerializer
 
     def get_queryset(self):
-        brand = self.request.query_params.get('brand', [])
-        category = self.request.query_params.get('category', '')
+        brand = self.request.query_params.get("brand", [])
+        category = self.request.query_params.get("category", "")
 
         queryset = AutoParts.objects.all()
-        
+
         if category and category.isdigit():
             queryset = queryset.filter(category__id=int(category))
-        
+
         if brand:
-            brand = [int(brand_id) for brand_id in brand.split(",") if brand_id.isdigit()]
+            brand = [
+                int(brand_id) for brand_id in brand.split(",") if brand_id.isdigit()
+            ]
             queryset = queryset.filter(brand__id__in=brand)
-        
+
         return queryset
-    
+
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)

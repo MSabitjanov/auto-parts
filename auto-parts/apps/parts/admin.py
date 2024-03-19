@@ -42,4 +42,4 @@ class AutoPartsAdmin(TranslationAdmin):
     )
     list_filter = ("category", "brand", "seller", "is_new")
     search_fields = ("category", "brand", "seller__email", "is_new")
-    readonly_fields = ("is_new", "rating")
+    readonly_fields = ("rating",)
